@@ -1,0 +1,69 @@
+<% form_tag :action => :run_query do %>
+<article id="schema">
+    <fieldset>
+        <legend>Table Schema</legend>
+        <ol>
+            <label for="schema">Schema:</label>
+            <%= text_area_tag 'schema' %>
+        </ol>
+        <section>
+            <p>For example:</p>
+            <pre>lname:varchar;lClass:varchar;fname:varchar;fClass:varchar;
+    amount:numeric(7,2);aClass:varchar;jurisdiction:varchar;
+    jclass:varchar*
+al-gamal;C;selim;C;12,322.00;S;abu dhabi;S*
+bosch;C;hendrik;C;14,073.00;C;netherlands;C*
+ivanov;C;alexander;C;24,016.00;TS;russia;S*
+schmidt;C;johann;C;22,400.32;TS;germany;S*
+smith;C;john;C;15,000.17;S;australia;TS*</pre>
+        </section>
+    </fieldset>
+    <br class="clear">
+</article>
+
+<article id="user-levels">
+    <fieldset>
+        <legend>User Security Levels</legend>
+        <ol>
+            <li>
+              <label for="user_levels">User levels:</label>
+              <%= text_area_tag 'user_levels' %>
+            </li>
+        </ol>
+        <section>
+            <p>For example:</p>
+            <pre>name:varchar;class:varchar*
+alice;C*
+baxter;TS*
+dexter;S*
+marek;C*</pre>
+        </section>
+    </fieldset>
+</article>
+
+<article id="query">
+    <fieldset>
+        <legend>User and SELECT Query</legend>
+        <ol>
+            <li>
+                <label for="user_name">User name:</label>
+                <%= text_field_tag 'user_name' %>
+            </li>
+            <li>
+                <label for="query">Query:</label>
+                <%= text_area_tag 'query' %>
+            </li>
+        </ol>
+        <section>
+            <p>For example:  <code>marek</code></p>
+            <pre>SELECT lname, fname, jurisdiction
+FROM Clients
+WHERE amount BETWEEN 14,000 AND 20.000</pre>
+        </section>
+    </fieldset>
+</article>
+
+<article id="submit">
+    <input type="submit" value="Submit &raquo;">
+</article>
+<% end %>
