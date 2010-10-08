@@ -4,7 +4,7 @@
         <legend>Table Schema</legend>
         <ol>
             <label for="schema">Schema:</label>
-            <%= text_area_tag 'schema' %>
+            <%= text_area_tag 'schema', @schema %>
         </ol>
         <section>
             <p>For example:</p>
@@ -27,7 +27,7 @@ smith;C;john;C;15,000.17;S;australia;TS*</pre>
         <ol>
             <li>
               <label for="user_levels">User levels:</label>
-              <%= text_area_tag 'user_levels' %>
+              <%= text_area_tag 'user_levels', @user_levels %>
             </li>
         </ol>
         <section>
@@ -47,11 +47,11 @@ marek;C*</pre>
         <ol>
             <li>
                 <label for="user_name">User name:</label>
-                <%= text_field_tag 'user_name' %>
+                <%= text_field_tag 'user_name', @user_name %>
             </li>
             <li>
                 <label for="query">Query:</label>
-                <%= text_area_tag 'query' %>
+                <%= text_area_tag 'query', @query %>
             </li>
         </ol>
         <section>

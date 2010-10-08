@@ -11,6 +11,18 @@
     <h1>
       <%= link_to('CS 505 - Sarah Vessels - Project 1 - Fall 2010', :controller => :form) %>
     </h1>
+    <%= debug(params) %>
+    <%= debug(session) %>
+    <% if params.has_key?(:error) && !params[:error].blank? %>
+      <section id="error">
+        <%=h params[:error] %>
+      </section>
+    <% end %>
+    <% if params.has_key?(:notice) && !params[:notice].blank? %>
+      <section id="notice">
+        <%=h params[:notice] %>
+      </section>
+    <% end %>
 </header>
 <article id="page-content">
   <%= yield %>
