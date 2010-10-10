@@ -1,11 +1,17 @@
 class ModelBase
-  NameRegex = /^[a-zA-Z]+[a-zA-Z0-9]+$/
   ValueRegex = /^[^"']*$/
+  TableNameRegex = /^[^"\-'\s]+$/
   attr_reader :table_name, :schema, :columns, :schema_lines
   
   def initialize(table_name, schema)
-    if (ValueRegex =~ table_name).nil?
-      raise "Invalid table name, cannot contain quotes"
+    if table_name.nil? || table_name.blank?
+      raise "Invalid table name, cannot be nil or blank"
+    end
+    if (TableNameRegex =~ table_name).nil?
+      raise "Invalid table name, cannot contain quotes, hyphens, or spaces"
+    end
+    if schema.nil? || schema.blank?
+      raise "Invalid table schema, cannot be nil or blank"
     end
     @table_name = table_name
     @schema = schema
@@ -37,6 +43,10 @@ class ModelBase
     end
   end
   
+  def get_queryable_columns
+    @columns.select { |col| !col.restricted? }
+  end
+  
   def ModelBase.get_schema_lines(schema)
     lines = schema.split('*')
     if lines.length < 2
@@ -46,7 +56,7 @@ class ModelBase
   end
   
   def load_data
-    num_expected_values = @column_names.length
+    num_expected_values = @columns.length
     values_to_insert = []
     # Skip first line, contains column definitions
     @schema_lines[1...@schema_lines.length].each do |line|
@@ -65,12 +75,12 @@ class ModelBase
       end
       values_to_insert << sprintf("'%s'", values.join("', '"))
     end
-    raise sprintf(
+    execute(sprintf(
       "INSERT INTO %s (%s) VALUES (%s);",
       @table_name,
-      @column_names.join(', '),
+      @columns.map { |col| col.name }.join(', '),
       values_to_insert.join("), (")
-    )
+    ))
   end
   
   def table_exists?

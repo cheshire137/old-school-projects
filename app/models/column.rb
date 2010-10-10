@@ -1,5 +1,7 @@
 class Column
+  NameRegex = /^[a-zA-Z]+[a-zA-Z0-9]+$/
   RangeRegex = /(\(\d+\)$)|(\(\d,\d\)$)/
+  RestrictedRegex = /class$/
   attr_reader :name, :type
   
   def initialize(name, type)
@@ -10,9 +12,10 @@ class Column
       raise "Invalid column type, cannot be blank or nil"
     end
     name.strip! # Trim whitespace
+    name.downcase! # Lowercase
     type.strip!
-    type.downcase! # Lowercase
-    if (name =~ ModelBase::NameRegex).nil?
+    type.downcase!
+    if (name =~ NameRegex).nil?
       raise "Invalid column name--must be alphanumeric, cannot begin with number"
     end
     if (type =~ RangeRegex).nil?
@@ -23,5 +26,9 @@ class Column
     end
     @name = name
     @type = type
+  end
+  
+  def restricted?
+    !(@name =~ RestrictedRegex).nil?
   end
 end

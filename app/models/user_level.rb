@@ -7,9 +7,9 @@ class UserLevel < ModelBase
   end
   
   def create_table
-    create_table(sprintf("%s, PRIMARY KEY (%s)",
+    super(sprintf("%s, PRIMARY KEY (%s)",
       @columns.map { |col| "#{col.name} #{col.type}" }.join(', '),
-      @column_names.join(', ')
+      @columns.map { |col| col.name }.join(', ')
     ))
   end
 end

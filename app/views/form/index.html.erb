@@ -8,9 +8,10 @@
         </ol>
         <section>
             <p>For example:</p>
-            <pre>lname:varchar;lClass:varchar;fname:varchar;fClass:varchar;
-    amount:numeric(7,2);aClass:varchar;jurisdiction:varchar;
-    jclass:varchar*
+            <pre>lname:varchar(25);lClass:varchar(3);fname:varchar(25);
+  fClass:varchar(3);amount:numeric(7,2);
+  aClass:varchar(3);jurisdiction:varchar(25);
+  jclass:varchar(3)*
 al-gamal;C;selim;C;12,322.00;S;abu dhabi;S*
 bosch;C;hendrik;C;14,073.00;C;netherlands;C*
 ivanov;C;alexander;C;24,016.00;TS;russia;S*
@@ -58,7 +59,7 @@ marek;C*</pre>
             <p>For example:  <code>marek</code></p>
             <pre>SELECT lname, fname, jurisdiction
 FROM Clients
-WHERE amount BETWEEN 14,000 AND 20.000</pre>
+WHERE amount BETWEEN 14,000 AND 20,000</pre>
         </section>
     </fieldset>
 </article>

@@ -1,11 +1,11 @@
 class FormController < ApplicationController
-  @@req_fields = {:schema => "Missing table schema",
+  RequiredFields = {:schema => "Missing table schema",
     :user_levels => "Missing user levels table schema",
     :user_name => "Missing user name",
     :query => "Missing query"}
   
   def index
-    @@req_fields.each do |field, errMsg|
+    RequiredFields.each do |field, errMsg|
       session[field] ||= ''
     end
     @schema = session[:schema]
@@ -15,27 +15,28 @@ class FormController < ApplicationController
   end
   
   def run_query
-    unless request.post?
+    unless request.post? # Only allow POST method
       redirect_to :action => :index, :error => "Please submit form"
       return
     end
     all_given = true
-    errorMessages = []
-    @@req_fields.each do |field, errMsg|
+    error_messages = []
+    RequiredFields.each do |field, error_message|
       if params.has_key?(field) && !params[field].blank?
         session[field] = params[field]
       else
         all_given = false
-        errorMessages << errMsg
+        error_messages << error_message
       end
     end
     unless all_given
-      redirect_to :action => :index, :error => errorMessages.join(", ")
+      redirect_to :action => :index, :error => error_messages.join(", ")
       return
     end
-    UserLevel.drop_table
-    UserLevel.create_table(session[:user_levels])
-    UserLevel.load_data(session[:user_levels])
+    ul = UserLevel.new(session[:user_levels])
+    ul.drop_table
+    ul.create_table
+    ul.load_data
   rescue => error
     redirect_to :action => :index, :error => error
   end
