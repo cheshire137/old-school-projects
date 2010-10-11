@@ -2,6 +2,8 @@ class Column
   NameRegex = /^[a-zA-Z]+[a-zA-Z0-9]+$/
   RangeRegex = /(\(\d+\)$)|(\(\d,\d\)$)/
   RestrictedRegex = /class$/
+  NumericRegex = /^numeric/
+  VarcharRegex = /^varchar/
   attr_reader :name, :type
   
   def initialize(name, type)
@@ -30,5 +32,13 @@ class Column
   
   def restricted?
     !(@name =~ RestrictedRegex).nil?
+  end
+  
+  def numeric?
+    !(@type =~ NumericRegex).nil?
+  end
+  
+  def varchar?
+    !(@type =~ VarcharRegex).nil?
   end
 end

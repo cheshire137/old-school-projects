@@ -1,2 +1,4 @@
 database.yml
 *.log
+.*.swp
+*.swp

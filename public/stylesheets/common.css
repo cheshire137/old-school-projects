@@ -74,11 +74,14 @@ br.clear {
 
 fieldset {
 	padding-top: 1.125em;
+	position: relative;
+	width: 100%;
 }
 
 	fieldset label {
 		display: inline-block;
 		width: 6em;
+		font-weight: bold;
 		vertical-align: top;
 	}
 
@@ -164,19 +167,21 @@ code {
 	font-family: "Lucida Console", "Andale Mono", "Courier New", monospace;
 }
 
-p,
-li {
-	margin-bottom: 1.125em;
-}
-
 li:last-child {
 	margin-bottom: 0;
+}
+
+p,
+li,
+pre {
+	margin-bottom: 1.125em;
 }
 
 ol {
 }
 
 	ol li {
+		width: 100%;
 		list-style: none;
 	}
 
@@ -187,8 +192,8 @@ code {
 
 section {
 	float: left;
-	width: 30em;
-	overflow: hidden;
+	width: 35em;
+	overflow: auto;
 }
 
 section#error,
@@ -210,6 +215,10 @@ section#notice {
 textarea {
 	width: 30em;
 	height: 9em;
+}
+
+textarea#schema {
+	height: 14em;
 }
 
 /* No text shadow because of http://twitter.com/miketaylr/status/12228805301 */

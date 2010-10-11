@@ -25,6 +25,9 @@ class Client < ModelBase
     end
     queried_columns = words[1...from_index]
     check_queried_columns(queried_columns)
+    # Swap user-queried columns with *, putting user-queried columns in outer
+    # query and * in inner query, so we can check user classifications in outer
+    # query
   end
   
   private

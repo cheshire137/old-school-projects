@@ -1,7 +1,7 @@
 class ModelBase
   ValueRegex = /^[^"']*$/
   TableNameRegex = /^[^"\-'\s]+$/
-  attr_reader :table_name, :schema, :columns, :schema_lines
+  attr_reader :table_name, :schema, :columns, :data_lines
   
   def initialize(table_name, schema)
     if table_name.nil? || table_name.blank?
@@ -15,8 +15,8 @@ class ModelBase
     end
     @table_name = table_name
     @schema = schema
-    @schema_lines = ModelBase.get_schema_lines(@schema)
-    @columns = ModelBase.extract_columns(@schema_lines)
+    @data_lines = ModelBase.get_schema_lines(@schema)
+    @columns = ModelBase.extract_columns(@data_lines.shift)
   end
   
   def create_table(table_def)
@@ -33,8 +33,11 @@ class ModelBase
     ActiveRecord::Base.connection.execute(sql)
   end
   
-  def ModelBase.extract_columns(lines)
-    lines.shift.split(';').collect do |column_def|
+  def ModelBase.extract_columns(column_defs_line)
+    if column_defs_line.nil? || column_defs_line.blank?
+      raise "Invalid column definitions line, cannot be nil or blank"
+    end
+    column_defs_line.split(';').collect do |column_def|
       unless column_def.include? ':'
         raise "Invalid table schema line, expected :-separated column name and type"
       end
@@ -52,14 +55,13 @@ class ModelBase
     if lines.length < 2
       raise "Invalid table schema, must have at least 2 *-separated lines"
     end
-    lines
+    lines.select { |line| !line.nil? && !line.strip.blank? }
   end
   
   def load_data
     num_expected_values = @columns.length
     values_to_insert = []
-    # Skip first line, contains column definitions
-    @schema_lines[1...@schema_lines.length].each do |line|
+    @data_lines.each do |line|
       unless line.include? ';'
         raise "Invalid value line, expected semi-colon"
       end
@@ -67,13 +69,24 @@ class ModelBase
       unless values.length == num_expected_values
         raise "Invalid number of values on line, expected #{num_expected_values}"
       end
-      values.each do |value|
+      cur_values_to_insert = ""
+      values.each_with_index do |value, index|
         value.strip! # Trim whitespace
         if (ValueRegex =~ value).nil?
           raise "Invalid value, cannot contain quotes"
         end
+        column = @columns[index]
+        cur_values_to_insert << if column.numeric?
+          # Don't quote numeric values, remove commas
+          value.gsub(/,/, '')
+        else
+          sprintf("'%s'", value)
+        end
+        if index < num_expected_values-1
+          cur_values_to_insert << ', '
+        end
       end
-      values_to_insert << sprintf("'%s'", values.join("', '"))
+      values_to_insert << cur_values_to_insert
     end
     execute(sprintf(
       "INSERT INTO %s (%s) VALUES (%s);",
