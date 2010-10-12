@@ -28,24 +28,34 @@ article#page-content {
 }
 
 article#query {
-	background-color: #8A9B0F;
+	background-color: #547980;
 }
 
 	article#query textarea {
 		width: 24em;
 	}
 
+article#result {
+	background-color: #E5FCC2;
+}
+
+	article#result table {
+		font-size: 1.3em;
+		margin-bottom: 0;
+	}
+
 article#schema {
-	background-color: #E97F02;
+	background-color: #9DE0AD;
 }
 
 article#submit,
 article#submit:hover {
-	color: #D34EBA !important;
+	color: white !important;
 }
 
 article#submit {
 	position: fixed;
+	background-color: #594F4F;
 	left: 0;
 	margin-bottom: 0;
 	-moz-box-shadow: 0 -1px 5px black;
@@ -55,11 +65,10 @@ article#submit {
 	width: 100%;
 	opacity: 0.9;
 	height: 3.75em;
-	background-color: #490A3D;
 }
 
 article#user-levels {
-	background-color: #BD1550;
+	background-color: #45ADA8;
 }
 
 body {
@@ -110,12 +119,13 @@ section#notice {
 h2,
 legend {
 	text-transform: uppercase;
+	font-weight: normal;
 	border-bottom: 1px dotted rgba(0, 0, 0, 0.5);
 	width: 100%;
 }
 
 header {
-	background-color: #F8CA00;
+	background-color: #594F4F;
 	margin-top: 1.375em;
 }
 
@@ -147,6 +157,7 @@ input[type=submit],
 input[type=reset] {
 	font-size: 200%;
 	padding: 0.3em 0.6em;
+	cursor: pointer;
 	background-color: rgba(0, 0, 0, 0.3);
 	font-family: "Tahoma", "Verdana", sans-serif;
 }
@@ -157,6 +168,7 @@ input[type=submit]:focus,
 input[type=reset]:focus,
 input[type=submit]:hover,
 input[type=reset]:hover {
+	cursor: pointer;
 	background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -205,12 +217,41 @@ section#notice {
 }
 
 section#error {
-	color: #742700;
+	color: #FF7355;
 }
 
 section#notice {
-	color: #4C8500;
+	color: #9DE0AD;
 }
+
+table {
+	margin: 0.3em 0 1.125em 0;
+}
+
+	table th,
+	table td {
+		padding: 0.2em 0.4em;
+	}
+	
+	table tbody td {
+		border: 1px solid #9DE0AD;
+	}
+	
+	table thead th {
+		text-shadow: 1px 1px 1px #45ADA8;
+		border: 1px solid #9DE0AD;
+		background-color: rgba(255, 255, 255, 0.3);
+	}
+	
+	table tbody tr:hover td,
+	table tbody tr.odd:hover td {
+		background-color: #9DE0AD;
+		border-color: #45ADA8;
+	}
+	
+	table tbody tr.odd td {
+		background-color: rgba(157, 224, 173, 0.3);
+	}
 
 textarea {
 	width: 30em;

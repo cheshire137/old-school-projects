@@ -58,12 +58,7 @@ class Client < ModelBase
       user_name,
       words[from_index+2...words.length].join(' ') # Append the last of user-given query
     )
-    mysql_result = execute(query)
-    session_storable_result = []
-    while row = mysql_result.fetch_hash do
-      session_storable_result << row
-    end
-    session_storable_result
+    execute(query)
   end
   
   private

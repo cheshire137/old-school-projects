@@ -8,12 +8,14 @@ class FormController < ApplicationController
     RequiredFields.each do |field, errMsg|
       session[field] ||= ''
     end
+    session[:columns] ||= nil
     session[:result] ||= nil
     @schema = session[:schema]
     @user_levels = session[:user_levels]
     @user_name = session[:user_name]
     @query = session[:query]
     @result = session[:result]
+    @columns = session[:columns]
   end
   
   def run_query
@@ -43,7 +45,13 @@ class FormController < ApplicationController
     client.drop_table
     client.create_table
     client.load_data
-    session[:result] = client.run_query(session[:user_name], session[:query])
+    mysql_result = client.run_query(session[:user_name], session[:query])
+    session_storable_result = []
+    while row = mysql_result.fetch_hash do
+      session_storable_result << row
+    end
+    session[:result] = session_storable_result
+    session[:columns] = mysql_result.fetch_fields.map(&:name)
     redirect_to :action => :index,
       :notice => sprintf(
         "Successfully constructed database and ran query, getting %d rows",

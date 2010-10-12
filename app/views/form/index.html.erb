@@ -1,20 +1,21 @@
-<% unless session[:result].nil? %>
+<% unless @result.nil? %>
   <article id="result">
-    <% if session[:result].empty? %>
+    <h2>Results</h2>
+    <% if @result.empty? %>
       <p>Your query had no results.</p>
     <% else %>
       <table>
         <thead>
           <tr>
-            <% session[:result].first.keys do |field_name| %>
-              <th><%= field_name %></th>
+            <% @columns.each do |field_name| %>
+              <th scope="col"><%= field_name %></th>
             <% end %>
           </tr>
         </thead>
         <tbody>
-          <% session[:result].each do |row_hash| %>
-            <tr>
-              <% row_hash.keys do |field_name| %>
+          <% @result.each do |row_hash| %>
+            <tr class="<%= cycle('even', 'odd') %>">
+              <% @columns.each do |field_name| %>
                 <td><%= row_hash[field_name] %></td>
               <% end %>
             </tr>
@@ -81,7 +82,7 @@ marek;C*</pre>
 
 <article id="query">
     <fieldset>
-        <legend>User and SELECT Query</legend>
+        <legend>User to Run As, SELECT Query</legend>
         <ol>
             <li>
                 <label for="user_name">User name:</label>
