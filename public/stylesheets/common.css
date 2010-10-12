@@ -214,11 +214,15 @@ section#notice {
 
 textarea {
 	width: 30em;
-	height: 9em;
+	height: 5em;
 }
 
 textarea#schema {
-	height: 14em;
+	height: 15em;
+}
+
+textarea#user_levels {
+	height: 12em;
 }
 
 /* No text shadow because of http://twitter.com/miketaylr/status/12228805301 */

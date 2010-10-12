@@ -30,6 +30,13 @@ class Column
     @type = type
   end
   
+  def get_class_column
+    if restricted?
+      return nil
+    end
+    @name.first + 'class'
+  end
+  
   def restricted?
     !(@name =~ RestrictedRegex).nil?
   end

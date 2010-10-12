@@ -18,7 +18,7 @@ SELECT CASE WHEN lclass = class OR
        END AS jurisdiction
 FROM clients,
      (
-       SELECT class
+       SELECT UPPER(class) AS class
        FROM user_levels
        WHERE name = 'marek'
      ) AS user_level

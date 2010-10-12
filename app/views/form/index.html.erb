@@ -1,3 +1,30 @@
+<% unless session[:result].nil? %>
+  <article id="result">
+    <% if session[:result].empty? %>
+      <p>Your query had no results.</p>
+    <% else %>
+      <table>
+        <thead>
+          <tr>
+            <% session[:result].first.keys do |field_name| %>
+              <th><%= field_name %></th>
+            <% end %>
+          </tr>
+        </thead>
+        <tbody>
+          <% session[:result].each do |row_hash| %>
+            <tr>
+              <% row_hash.keys do |field_name| %>
+                <td><%= row_hash[field_name] %></td>
+              <% end %>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    <% end %>
+  </article>
+<% end %>
+
 <% form_tag :action => :run_query do %>
 <article id="schema">
     <fieldset>
@@ -8,9 +35,9 @@
         </ol>
         <section>
             <p>For example:</p>
-            <pre>lname:varchar(25);lClass:varchar(3);fname:varchar(25);
-  fClass:varchar(3);amount:numeric(7,2);aClass:varchar(3);
-  jurisdiction:varchar(25);jclass:varchar(3)*
+            <pre>lname:varchar(25);lClass:varchar(2);fname:varchar(25);
+  fClass:varchar(2);amount:numeric(7,2);aClass:varchar(2);
+  jurisdiction:varchar(25);jclass:varchar(2)*
 al-gamal;C;selim;C;12,322.00;S;abu dhabi;S*
 bosch;C;hendrik;C;14,073.00;C;netherlands;C*
 ivanov;C;alexander;C;24,016.00;TS;russia;S*
@@ -19,7 +46,8 @@ smith;C;john;C;15,000.17;S;australia;TS*</pre>
             <p>Columns holding user classification should begin with the first
             letter of their associated column and end with 'class'.  For example,
             column <code>jurisdiction</code> would have user classification
-            column <code>jclass</code>.</p>
+            column <code>jclass</code>.  Commas will be stripped from numeric
+            values.</p>
         </section>
     </fieldset>
     <br class="clear">
@@ -36,11 +64,17 @@ smith;C;john;C;15,000.17;S;australia;TS*</pre>
         </ol>
         <section>
             <p>For example:</p>
-            <pre>name:varchar(25);class:varchar(3)*
+            <pre>name:varchar(25);class:varchar(2)*
 alice;C*
 baxter;TS*
 dexter;S*
 marek;C*</pre>
+            <p>One column must be named <code>class</code> and it must contain
+            the user classification.  Valid classifications include <code>C</code>
+            for Confidential, <code>S</code> for Secret, and <code>TS</code>
+            for Top Secret.  Top Secret can read all other classifications,
+            Secret can read itself and Confidential, and Confidential can only
+            read itself.</p>
         </section>
     </fieldset>
 </article>
@@ -62,7 +96,8 @@ marek;C*</pre>
             <p>For example:  <code>marek</code></p>
             <pre>SELECT lname, fname, jurisdiction
 FROM Clients
-WHERE amount BETWEEN 14,000 AND 20,000</pre>
+WHERE amount BETWEEN 14000 AND 20000</pre>
+            <p>Commas are not allowed in numeric values.</p>
         </section>
     </fieldset>
 </article>

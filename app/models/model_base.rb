@@ -46,6 +46,20 @@ class ModelBase
     end
   end
   
+  def get_columns_by_name(names)
+    if names.nil? || names.empty?
+      return []
+    end
+    # In case columns were listed in query as only comma-separated, with no
+    # spaces
+    if names.length.eql?(1) && names.first.include?(',')
+      names.split!(',')
+    end
+    # Lowercase all the given column names, remove trailing commas
+    names.map! { |col_name| col_name.downcase.chomp(',') }
+    @columns.select { |col| names.include? col.name }
+  end
+  
   def get_queryable_columns
     @columns.select { |col| !col.restricted? }
   end

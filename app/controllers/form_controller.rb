@@ -8,10 +8,12 @@ class FormController < ApplicationController
     RequiredFields.each do |field, errMsg|
       session[field] ||= ''
     end
+    session[:result] ||= nil
     @schema = session[:schema]
     @user_levels = session[:user_levels]
     @user_name = session[:user_name]
     @query = session[:query]
+    @result = session[:result]
   end
   
   def run_query
@@ -37,7 +39,17 @@ class FormController < ApplicationController
     ul.drop_table
     ul.create_table
     ul.load_data
-  rescue => error
+    client = Client.new(session[:schema])
+    client.drop_table
+    client.create_table
+    client.load_data
+    session[:result] = client.run_query(session[:user_name], session[:query])
+    redirect_to :action => :index,
+      :notice => sprintf(
+        "Successfully constructed database and ran query, getting %d rows",
+        session[:result].length
+      )
+  rescue => error # Catch any exceptions
     redirect_to :action => :index, :error => error
   end
 end
