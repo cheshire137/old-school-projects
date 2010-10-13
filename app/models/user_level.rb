@@ -1,6 +1,8 @@
 class UserLevel < ModelBase
+  TableName = "user_levels"
+  
   def initialize(schema)
-    super("user_levels", schema)
+    super(TableName, schema)
     if @columns.length != 2
       raise "Invalid number of columns for user levels table, expected 2"
     end
@@ -15,5 +17,9 @@ class UserLevel < ModelBase
       @columns.map { |col| "#{col.name} #{col.type}" }.join(', '),
       @columns.map { |col| col.name }.join(', ')
     ))
+  end
+  
+  def UserLevel.drop_table
+    super(TableName)
   end
 end

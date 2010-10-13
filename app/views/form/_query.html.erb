@@ -1,0 +1,27 @@
+<article id="user_name_query">
+  <fieldset>
+    <legend>
+      User to Run As, SELECT Query /
+      <%= link_to_function 'Load samples into form',
+        'load_user_name_query_examples()' %>
+    </legend>
+    <ol>
+      <li>
+        <label for="user_name">User name:</label>
+        <%= text_field_tag 'user_name', user_name %>
+      </li>
+      <li>
+        <label for="query">Query:</label>
+        <%= text_area_tag 'query', query %>
+      </li>
+    </ol>
+    <section>
+      <p>For example:  <code id="user_name_example">marek</code></p>
+      <pre id="query_example">SELECT lname, fname, jurisdiction
+FROM Clients
+WHERE amount BETWEEN 14000 AND 20000</pre>
+      <p>Commas are not allowed in numeric values.  To select all columns,
+      please use <code>*</code> and not <code>clients.*</code>.</p>
+    </section>
+  </fieldset>
+</article>

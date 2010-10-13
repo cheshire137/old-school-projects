@@ -1,109 +1,24 @@
-<% unless @result.nil? %>
-  <article id="result">
-    <h2>Results</h2>
-    <% if @result.empty? %>
-      <p>Your query had no results.</p>
-    <% else %>
-      <table>
-        <thead>
-          <tr>
-            <% @columns.each do |field_name| %>
-              <th scope="col"><%= field_name %></th>
-            <% end %>
-          </tr>
-        </thead>
-        <tbody>
-          <% @result.each do |row_hash| %>
-            <tr class="<%= cycle('even', 'odd') %>">
-              <% @columns.each do |field_name| %>
-                <td><%= row_hash[field_name] %></td>
-              <% end %>
-            </tr>
-          <% end %>
-        </tbody>
-      </table>
-    <% end %>
-  </article>
+<% unless session[:result].nil? %>
+  <%= render :partial => 'results', :object => session[:result],
+    :locals => {:columns => session[:columns]} %>
 <% end %>
 
-<% form_tag :action => :run_query do %>
-<article id="schema">
-    <fieldset>
-        <legend>Table Schema</legend>
-        <ol>
-            <label for="schema">Schema:</label>
-            <%= text_area_tag 'schema', @schema %>
-        </ol>
-        <section>
-            <p>For example:</p>
-            <pre>lname:varchar(25);lClass:varchar(2);fname:varchar(25);
-  fClass:varchar(2);amount:numeric(7,2);aClass:varchar(2);
-  jurisdiction:varchar(25);jclass:varchar(2)*
-al-gamal;C;selim;C;12,322.00;S;abu dhabi;S*
-bosch;C;hendrik;C;14,073.00;C;netherlands;C*
-ivanov;C;alexander;C;24,016.00;TS;russia;S*
-schmidt;C;johann;C;22,400.32;TS;germany;S*
-smith;C;john;C;15,000.17;S;australia;TS*</pre>
-            <p>Columns holding user classification should begin with the first
-            letter of their associated column and end with 'class'.  For example,
-            column <code>jurisdiction</code> would have user classification
-            column <code>jclass</code>.  Commas will be stripped from numeric
-            values.</p>
-        </section>
-    </fieldset>
-    <br class="clear">
-</article>
-
-<article id="user-levels">
-    <fieldset>
-        <legend>User Security Levels</legend>
-        <ol>
-            <li>
-              <label for="user_levels">User levels:</label>
-              <%= text_area_tag 'user_levels', @user_levels %>
-            </li>
-        </ol>
-        <section>
-            <p>For example:</p>
-            <pre>name:varchar(25);class:varchar(2)*
-alice;C*
-baxter;TS*
-dexter;S*
-marek;C*</pre>
-            <p>One column must be named <code>class</code> and it must contain
-            the user classification.  Valid classifications include <code>C</code>
-            for Confidential, <code>S</code> for Secret, and <code>TS</code>
-            for Top Secret.  Top Secret can read all other classifications,
-            Secret can read itself and Confidential, and Confidential can only
-            read itself.</p>
-        </section>
-    </fieldset>
-</article>
-
-<article id="query">
-    <fieldset>
-        <legend>User to Run As, SELECT Query</legend>
-        <ol>
-            <li>
-                <label for="user_name">User name:</label>
-                <%= text_field_tag 'user_name', @user_name %>
-            </li>
-            <li>
-                <label for="query">Query:</label>
-                <%= text_area_tag 'query', @query %>
-            </li>
-        </ol>
-        <section>
-            <p>For example:  <code>marek</code></p>
-            <pre>SELECT lname, fname, jurisdiction
-FROM Clients
-WHERE amount BETWEEN 14000 AND 20000</pre>
-            <p>Commas are not allowed in numeric values.</p>
-        </section>
-    </fieldset>
-</article>
-
-<article id="submit">
-    <input type="submit" value="Submit &raquo;">
-</article>
+<% form_tag :action => session[:tables_created] ? :run_query : :create_tables do %>
+  <% if session[:tables_created] %>
+    <%= render :partial => 'query', :object => session[:query],
+      :locals => {:user_name => session[:user_name]} %>
+  <% else %>
+    <%= render :partial => 'clients_schema', :object => session[:schema] %>
+    <%= render :partial => 'user_levels_schema', :object => session[:user_levels] %>
+  <% end %>
+  
+  <article id="submit">
+    <% if session[:tables_created] %>
+      <%= submit_tag 'Run query', :name => 'run_query' %> /
+      <%= submit_tag 'Drop tables, reset form', :name => 'logout', :id => 'logout',
+        :confirm => "Are you sure you want to reset the form and drop all tables?" %>
+    <% else %>
+      <%= submit_tag 'Create tables', :name => 'create_tables' %>
+    <% end %>
+  </article>
 <% end %>

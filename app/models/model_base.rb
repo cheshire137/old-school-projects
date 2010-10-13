@@ -20,16 +20,20 @@ class ModelBase
   end
   
   def create_table(table_def)
-    execute(
+    ModelBase.execute(
       sprintf("CREATE TABLE %s (%s);", @table_name, table_def)
     )
   end
   
   def drop_table
-    execute(sprintf("DROP TABLE IF EXISTS %s;", @table_name))
+    ModelBase.drop_table(@table_name)
   end
   
-  def execute(sql)
+  def ModelBase.drop_table(table_name)
+    execute(sprintf("DROP TABLE IF EXISTS %s;", table_name))
+  end
+  
+  def ModelBase.execute(sql)
     ActiveRecord::Base.connection.execute(sql)
   end
   
@@ -50,10 +54,16 @@ class ModelBase
     if names.nil? || names.empty?
       return []
     end
-    # In case columns were listed in query as only comma-separated, with no
-    # spaces
-    if names.length.eql?(1) && names.first.include?(',')
-      names.split!(',')
+    if names.length.eql? 1
+      name = names.first
+      if name.include? ','
+        # In case columns were listed in query as only comma-separated, with no
+        # spaces
+        names.split!(',')
+      elsif name.eql? '*'
+        # User querying all columns, so return all non-classification columns
+        return @columns.select { |col| !col.restricted? }
+      end
     end
     # Lowercase all the given column names, remove trailing commas
     names.map! { |col_name| col_name.downcase.chomp(',') }
@@ -102,7 +112,7 @@ class ModelBase
       end
       values_to_insert << cur_values_to_insert
     end
-    execute(sprintf(
+    ModelBase.execute(sprintf(
       "INSERT INTO %s (%s) VALUES (%s);",
       @table_name,
       @columns.map { |col| col.name }.join(', '),
@@ -111,7 +121,7 @@ class ModelBase
   end
   
   def table_exists?
-    !execute(
+    !ModelBase.execute(
       sprintf("SHOW TABLES WHERE Tables_in_cs505 = '%s'", @table_name)
     ).fetch_row.nil?
   end

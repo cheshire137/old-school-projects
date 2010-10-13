@@ -1,6 +1,8 @@
 class Client < ModelBase
+  TableName = "clients"
+  
   def initialize(schema)
-    super("clients", schema)
+    super(TableName, schema)
     given_col_names = @columns.map(&:name)
     expected_class_col_names =
       @columns.map(&:get_class_column).reject { |col_name| col_name.nil? }
@@ -21,6 +23,10 @@ class Client < ModelBase
     super(sprintf("%s",
       @columns.map { |col| "#{col.name} #{col.type}" }.join(', ')
     ))
+  end
+  
+  def Client.drop_table
+    super(TableName)
   end
   
   def run_query(user_name, query)
@@ -45,6 +51,9 @@ class Client < ModelBase
     if words.length < from_index+1
       raise "Invalid query, no table name specified"
     end
+    if words[from_index+1].downcase.eql? 'user_levels'
+      raise "Invalid query, cannot query user classification table"
+    end
     query = sprintf(
       "SELECT %s
        FROM clients,
@@ -58,7 +67,7 @@ class Client < ModelBase
       user_name,
       words[from_index+2...words.length].join(' ') # Append the last of user-given query
     )
-    execute(query)
+    ModelBase.execute(query)
   end
   
   private

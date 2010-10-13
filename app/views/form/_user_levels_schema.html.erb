@@ -1,0 +1,29 @@
+<article id="user-levels">
+  <fieldset>
+    <legend>
+      User Classification Levels - Table Schema /
+      <%= link_to_function 'Load sample into form',
+        'load_user_levels_schema_example()' %>
+    </legend>
+    <ol>
+      <li>
+        <label for="user_levels">User levels:</label>
+        <%= text_area_tag 'user_levels', user_levels_schema %>
+      </li>
+    </ol>
+    <section>
+      <p>For example:</p>
+      <pre id="user_levels_schema_example">name:varchar(25);class:varchar(2)*
+alice;C*
+baxter;TS*
+dexter;S*
+marek;C*</pre>
+      <p>One column must be named <code>class</code> and it must contain
+      the user classification.  Valid classifications include <code>C</code>
+      for Confidential, <code>S</code> for Secret, and <code>TS</code>
+      for Top Secret.  Top Secret can read all other classifications,
+      Secret can read itself and Confidential, and Confidential can only
+      read itself.</p>
+    </section>
+  </fieldset>
+</article>

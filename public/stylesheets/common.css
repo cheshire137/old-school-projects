@@ -14,7 +14,8 @@ a:hover {
 }
 
 article,
-header {
+header,
+footer {
 	padding: 1.5em 1.5em 1.5em 12%;
 	margin: 0 2em 1.375em 0;
 	color: black;
@@ -27,11 +28,11 @@ article#page-content {
 	margin: 0;
 }
 
-article#query {
+article#user_name_query {
 	background-color: #547980;
 }
 
-	article#query textarea {
+	article#user_name_query textarea {
 		width: 24em;
 	}
 
@@ -44,7 +45,7 @@ article#result {
 		margin-bottom: 0;
 	}
 
-article#schema {
+article#clients_schema {
 	background-color: #9DE0AD;
 }
 
@@ -66,6 +67,10 @@ article#submit {
 	opacity: 0.9;
 	height: 3.75em;
 }
+
+	input#logout {
+		font-size: 0.9em;
+	}
 
 article#user-levels {
 	background-color: #45ADA8;
@@ -100,6 +105,50 @@ fieldset {
 		width: 31em;
 	}
 
+footer,
+header {
+	margin-top: 1.375em;
+}
+
+footer {
+	background-color: #9DE0AD;
+	color: #375055;
+}
+
+	footer a,
+	footer a:link,
+	footer a:active,
+	footer a:visited {
+		color: #348582;
+		text-decoration: underline;
+	}
+	
+	footer a:hover {
+		text-decoration: none;
+		color: #594F4F;
+	}
+
+	footer ul {
+		margin: 0;
+		padding: 0;
+	}
+	
+		footer ul li {
+			list-style: none;
+			display: inline;
+			border-right: 3px solid rgba(0, 0, 0, 0.2);
+			padding: 0 1em;
+		}
+		
+		footer ul li:first-child {
+			padding-left: 0;
+		}
+		
+		footer ul li:last-child {
+			border-right: none;
+			padding-right: 0;
+		}
+
 h1 {
 	font-size: 1.75em;
 }
@@ -124,9 +173,22 @@ legend {
 	width: 100%;
 }
 
+	h2 a,
+	legend a,
+	h2 a:link,
+	legend a:link,
+	h2 a:active,
+	legend a:active,
+	h2 a:visited,
+	legend a:visited {
+		text-transform: none;
+		color: rgba(0, 0, 0, 0.6);
+		font-size: 0.8em;
+		line-height: 1.8;
+	}
+
 header {
 	background-color: #594F4F;
-	margin-top: 1.375em;
 }
 
 html {
@@ -255,7 +317,7 @@ table {
 
 textarea {
 	width: 30em;
-	height: 5em;
+	height: 5.5em;
 }
 
 textarea#schema {

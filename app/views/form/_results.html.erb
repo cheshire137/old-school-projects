@@ -1,0 +1,25 @@
+<article id="result">
+  <h2>Results</h2>
+  <% if results.empty? %>
+    <p>Your query had no results.</p>
+  <% else %>
+    <table>
+      <thead>
+        <tr>
+          <% columns.each do |field_name| %>
+            <th scope="col"><%= field_name %></th>
+          <% end %>
+        </tr>
+      </thead>
+      <tbody>
+        <% results.each do |row_hash| %>
+          <tr class="<%= cycle('even', 'odd') %>">
+            <% columns.each do |field_name| %>
+              <td><%= row_hash[field_name] %></td>
+            <% end %>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</article>

@@ -5,6 +5,7 @@
 <title>CS 505 - Sarah Vessels - Project 1 - Fall 2010</title>
 <%= stylesheet_link_tag 'reset' %>
 <%= stylesheet_link_tag 'common' %>
+<%= javascript_include_tag :defaults %>
 </head>
 <body>
 <header id="page-header">
@@ -25,5 +26,18 @@
 <article id="page-content">
   <%= yield %>
 </article>
+<footer>
+    <ul>
+        <li>&copy; 2010 Sarah Vessels</li>
+        <li>Built using <%= link_to 'Ruby on Rails',
+        'http://rubyonrails.org/' %> and <%= link_to 'Prototype',
+        'http://www.prototypejs.org/' %></li>
+        <li>Thanks to <%= link_to 'ColourLovers',
+        'http://www.colourlovers.com/' %> and user <%= link_to 'alpen',
+        'http://www.colourlovers.com/lover/alpen' %> for the color scheme
+        &ldquo;<%= link_to 'i demand a pancake',
+        'http://www.colourlovers.com/palette/443995/i_demand_a_pancake' %>&rdquo;</li>
+    </ul>
+</footer>
 </body>
 </html>

@@ -1,0 +1,30 @@
+<article id="clients_schema">
+  <fieldset>
+    <legend>
+      Clients - Table Schema /
+      <%= link_to_function 'Load sample into form',
+        'load_clients_schema_example()' %>
+    </legend>
+    <ol>
+      <label for="schema">Schema:</label>
+      <%= text_area_tag 'schema', clients_schema %>
+    </ol>
+    <section>
+      <p>For example:</p>
+      <pre id="clients_schema_example">lname:varchar(25);lClass:varchar(2);fname:varchar(25);
+fClass:varchar(2);amount:numeric(7,2);aClass:varchar(2);
+jurisdiction:varchar(25);jclass:varchar(2)*
+al-gamal;C;selim;C;12,322.00;S;abu dhabi;S*
+bosch;C;hendrik;C;14,073.00;C;netherlands;C*
+ivanov;C;alexander;C;24,016.00;TS;russia;S*
+schmidt;C;johann;C;22,400.32;TS;germany;S*
+smith;C;john;C;15,000.17;S;australia;TS*</pre>
+      <p>Columns holding user classification should begin with the first
+      letter of their associated column and end with 'class'.  For example,
+      column <code>jurisdiction</code> would have user classification
+      column <code>jclass</code>.  Commas will be stripped from numeric
+      values.</p>
+    </section>
+  </fieldset>
+  <br class="clear">
+</article>
