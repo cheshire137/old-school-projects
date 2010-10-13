@@ -5,6 +5,7 @@ class Column
   NumericRegex = /^numeric/
   VarcharRegex = /^varchar/
   attr_reader :name, :type
+  attr_accessor :function
   
   def initialize(name, type)
     if name.nil? || name.blank?
@@ -28,6 +29,7 @@ class Column
     end
     @name = name
     @type = type
+    @function = nil
   end
   
   def get_class_column

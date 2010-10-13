@@ -67,7 +67,27 @@ class ModelBase
     end
     # Lowercase all the given column names, remove trailing commas
     names.map! { |col_name| col_name.downcase.chomp(',') }
-    @columns.select { |col| names.include? col.name }
+    
+    # Select from all valid columns those that the user SELECTed:
+    selected_cols = @columns.select { |col| names.include? col.name }
+    
+    if selected_cols.length != names.length
+      names.each do |name|
+        # Check if user applied function to this column:
+        if name.include?('(') && name.include?(')')
+          func_start = name.index('(')
+          name_only = name[func_start+1...name.index(')')]
+          matching_columns = @columns.select { |col| col.name.eql? name_only }
+          next if matching_columns.length != 1
+          column = matching_columns.first
+          function = name[0...func_start]
+          column.function = function
+          selected_cols << column
+        end
+      end
+    end
+    
+    selected_cols
   end
   
   def get_queryable_columns

@@ -101,17 +101,34 @@ class Client < ModelBase
     def get_case_statements(queried_columns)
       queried_columns.collect do |column|
         class_column = column.get_class_column()
+        if column.function.nil?
+          func_start = ''
+          func_end = ''
+          selected_name = column.name
+        else
+          func_start = column.function + '('
+          func_end = ')'
+          selected_name = sprintf(
+            "%s(%s)",
+            column.function,
+            column.name
+          )
+        end
         sprintf(
-          "CASE WHEN %s = class OR
-                     class = 'TS' OR
-                     (class = 'S' AND %s = 'C')
-                THEN %s
-                ELSE NULL
-           END AS %s",
+          "%s
+             CASE WHEN %s = class OR
+                       class = 'TS' OR
+                       (class = 'S' AND %s = 'C')
+                  THEN %s
+                  ELSE NULL
+             END
+           %s AS \"%s\"",
+          func_start,
           class_column,
           class_column,
           column.name,
-          column.name
+          func_end,
+          selected_name
         )
       end.join(', ')
     end
