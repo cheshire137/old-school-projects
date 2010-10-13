@@ -23,18 +23,14 @@ footer {
 	border-top-right-radius: 1em;
 }
 
+article#clients_schema {
+	background-color: #9DE0AD;
+}
+
 article#page-content {
 	padding: 0;
 	margin: 0;
 }
-
-article#user_name_query {
-	background-color: #547980;
-}
-
-	article#user_name_query textarea {
-		width: 24em;
-	}
 
 article#result {
 	background-color: #E5FCC2;
@@ -44,10 +40,44 @@ article#result {
 		font-size: 1.3em;
 		margin-bottom: 0;
 	}
+	
+		article#result table thead th {	
+			text-shadow: 1px 1px 1px #9DE0AD;
+			background-color: rgba(255, 255, 255, 0.3);
+			color: #547980;
+		}
+	
+		article#result table tbody tr:hover td,
+		article#result table tbody tr.odd:hover td {
+			background-color: #9DE0AD;
+		}
+		
+		article#result table tbody tr.odd td {
+			background-color: rgba(157, 224, 173, 0.3);
+		}
 
-article#clients_schema {
-	background-color: #9DE0AD;
+article#schema_summary {
+	background-color: #547980;
 }
+
+	article#schema_summary table {
+		margin-bottom: 0;
+	}
+	
+		article#schema_summary table thead th {	
+			text-shadow: 1px 1px 1px #547980;
+			background-color: #45ADA8;
+			color: #9DE0AD;
+		}
+	
+		article#schema_summary table tbody tr:hover td,
+		article#schema_summary table tbody tr.even:hover td {
+			background-color: #9DE0AD;
+		}
+		
+		article#schema_summary table tbody tr.even td {
+			background-color: rgba(229, 252, 194, 0.2);
+		}
 
 article#submit,
 article#submit:hover {
@@ -75,6 +105,14 @@ article#submit {
 article#user-levels {
 	background-color: #45ADA8;
 }
+
+article#user_name_query {
+	background-color: #9DE0AD;
+}
+
+	article#user_name_query textarea {
+		width: 24em;
+	}
 
 body {
 	background-color: #2E2E2E;
@@ -161,7 +199,8 @@ h2 a:hover {
 h2,
 legend,
 section#error,
-section#notice {
+section#notice,
+table caption {
 	font-size: 1.375em; /* 16x1.375=22px */
 }
 
@@ -295,26 +334,12 @@ table {
 		padding: 0.2em 0.4em;
 	}
 	
-	table tbody td {
-		border: 1px solid #9DE0AD;
-	}
-	
+	table tbody td,
 	table thead th {
-		text-shadow: 1px 1px 1px #45ADA8;
-		border: 1px solid #9DE0AD;
-		background-color: rgba(255, 255, 255, 0.3);
+		border-top: 1px solid rgba(0, 0, 0, 0.3);
+		border-bottom: 1px solid rgba(0, 0, 0, 0.3);
 	}
-	
-	table tbody tr:hover td,
-	table tbody tr.odd:hover td {
-		background-color: #9DE0AD;
-		border-color: #45ADA8;
-	}
-	
-	table tbody tr.odd td {
-		background-color: rgba(157, 224, 173, 0.3);
-	}
-
+		
 textarea {
 	width: 30em;
 	height: 5.5em;

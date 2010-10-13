@@ -32,6 +32,15 @@ class FormController < ApplicationController
     session[:result] ||= nil
     session[:client] ||= nil
     session[:tables_created] ||= false
+    
+    if session[:tables_created]
+      @clients_desc_rows, @clients_desc_cols =
+        get_rows_and_columns(Client.describe)
+      @user_levels_desc_rows, @user_levels_desc_cols =
+        get_rows_and_columns(UserLevel.describe)
+    end
+  rescue => error
+    render :text => error
   end
   
   def logout
@@ -48,6 +57,8 @@ class FormController < ApplicationController
     reset_session
     redirect_to :action => :index,
       :notice => "Wiped session data, dropped tables"
+  rescue => error
+    redirect_to :action => :index, :error => error
   end
   
   def run_query
@@ -69,12 +80,7 @@ class FormController < ApplicationController
     session[:result] = nil
     mysql_result = session[:client].run_query(session[:user_name],
       session[:query])
-    session_storable_result = []
-    while row = mysql_result.fetch_hash do
-      session_storable_result << row
-    end
-    session[:result] = session_storable_result
-    session[:columns] = mysql_result.fetch_fields.map(&:name)
+    session[:result], session[:columns] = get_rows_and_columns(mysql_result)
     redirect_to :action => :index,
       :notice => sprintf(
         "Successfully ran query, getting %d rows",
@@ -97,5 +103,14 @@ class FormController < ApplicationController
         end
       end
       raise error_messages.join(', ') unless all_given
+    end
+    
+    def get_rows_and_columns(mysql_result)
+      rows = []
+      while row = mysql_result.fetch_hash do
+        rows << row
+      end
+      columns = mysql_result.fetch_fields.map(&:name)
+      [rows, columns]
     end
 end

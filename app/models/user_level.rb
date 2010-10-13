@@ -19,6 +19,10 @@ class UserLevel < ModelBase
     ))
   end
   
+  def UserLevel.describe
+    ModelBase.execute(sprintf("DESCRIBE %s;", TableName))
+  end
+  
   def UserLevel.drop_table
     super(TableName)
   end

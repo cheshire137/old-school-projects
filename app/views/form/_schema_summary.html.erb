@@ -1,0 +1,12 @@
+<article id="schema_summary">
+  <h2>Existing Table Schemas</h2>
+  <section>
+    <%= render :partial => 'table', :locals => {:rows => @clients_desc_rows,
+      :columns => @clients_desc_cols, :title => 'clients'} %>
+  </section>
+  <section>
+    <%= render :partial => 'table', :locals => {:rows => @user_levels_desc_rows,
+      :columns => @user_levels_desc_cols, :title => 'user_levels'} %>
+  </section>
+  <br style="clear:both;">
+</article>

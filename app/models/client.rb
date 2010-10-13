@@ -25,6 +25,10 @@ class Client < ModelBase
     ))
   end
   
+  def Client.describe
+    ModelBase.execute(sprintf("DESCRIBE %s;", TableName))
+  end
+  
   def Client.drop_table
     super(TableName)
   end
