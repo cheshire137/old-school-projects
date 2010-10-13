@@ -46,9 +46,9 @@ class FormController < ApplicationController
   def logout
     Client.drop_table
     UserLevel.drop_table
-    RequiredFields.each do |field, errMsg|
-      session[field] = nil
-    end
+    session[:user_name] = nil
+    session[:schema] = nil
+    session[:user_levels] = nil
     session[:query] = nil
     session[:tables_created] = false
     session[:client] = nil
