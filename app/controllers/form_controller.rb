@@ -7,12 +7,12 @@ class FormController < ApplicationController
     session[:client] = nil
     check_params({:schema => "Missing clients table schema",
       :user_levels => "Missing user levels schema"})
+    UserLevel.drop_table
     ul = UserLevel.new(session[:user_levels])
-    ul.drop_table
     ul.create_table
     ul.load_data
+    Client.drop_table
     client = Client.new(session[:schema])
-    client.drop_table
     client.create_table
     client.load_data
     session[:client] = client
