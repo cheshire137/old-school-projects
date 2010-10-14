@@ -13,10 +13,13 @@ class UserLevel < ModelBase
   end
   
   def create_table
-    super(sprintf("%s, PRIMARY KEY (%s)",
-      @columns.map { |col| "#{col.name} #{col.type}" }.join(', '),
-      @columns.map { |col| col.name }.join(', ')
-    ))
+    super(
+      sprintf(
+        "%s, PRIMARY KEY (%s)",
+        get_column_definition_string(),
+        @columns.map(&:name).join(', ')
+      )
+    )
   end
   
   def UserLevel.describe

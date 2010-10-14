@@ -27,6 +27,7 @@ class FormController < ApplicationController
     session[:user_name] ||= ''
     session[:schema] ||= ''
     session[:user_levels] ||= ''
+    session[:generated_query] ||= nil
     session[:query] ||= ''
     session[:columns] ||= nil
     session[:result] ||= nil
@@ -47,6 +48,7 @@ class FormController < ApplicationController
     Client.drop_table
     UserLevel.drop_table
     session[:user_name] = nil
+    session[:generated_query] = nil
     session[:schema] = nil
     session[:user_levels] = nil
     session[:query] = nil
@@ -78,8 +80,8 @@ class FormController < ApplicationController
     check_params({:query => "Missing query",
       :user_name => "Missing user name"})
     session[:result] = nil
-    mysql_result = session[:client].run_query(session[:user_name],
-      session[:query])
+    session[:generated_query], mysql_result =
+      session[:client].run_query(session[:user_name], session[:query])
     session[:result], session[:columns] = get_rows_and_columns(mysql_result)
     redirect_to :action => :index,
       :notice => sprintf(

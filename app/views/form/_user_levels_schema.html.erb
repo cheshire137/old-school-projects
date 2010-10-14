@@ -19,11 +19,12 @@ baxter;TS*
 dexter;S*
 marek;C*</pre>
       <p>One column must be named <code>class</code> and it must contain
-      the user classification.  Valid classifications include <code>C</code>
-      for Confidential, <code>S</code> for Secret, and <code>TS</code>
-      for Top Secret.  Top Secret can read all other classifications,
-      Secret can read itself and Confidential, and Confidential can only
-      read itself.</p>
+      the user classification.  Valid classifications include <code>U</code> for
+      Unclassified, <code>C</code> for Confidential, <code>S</code> for Secret,
+      and <code>TS</code> for Top Secret.  Top Secret can read all other
+      classifications; Secret can read itself, Confidential, and Unclassified;
+      Confidential can read itself and Unclassified; and Unclassified can read
+      only itself.</p>
     </section>
   </fieldset>
 </article>

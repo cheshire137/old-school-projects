@@ -3,25 +3,30 @@
     :locals => {:columns => session[:columns]} %>
 <% end %>
 
-<% form_tag :action => session[:tables_created] ? :run_query : :create_tables do %>
-  <% if session[:tables_created] %>
+<% if session[:tables_created] %>
+  <% form_tag :action => :run_query do %>
     <%= render :partial => 'query', :object => session[:query],
       :locals => {:user_name => session[:user_name]} %>
+    <% unless session[:query].nil? || session[:generated_query].nil? %>
+      <%= render :partial => 'query_summary',
+        :locals => {:given_query => session[:query],
+          :generated_query => session[:generated_query]} %>
+    <% end %>
     <%= render :partial => 'schema_summary',
       :locals => {:clients => @clients_schema,
       :user_levels => @user_levels_schema} %>
-  <% else %>
-    <%= render :partial => 'clients_schema', :object => session[:schema] %>
-    <%= render :partial => 'user_levels_schema', :object => session[:user_levels] %>
-  <% end %>
-  
-  <article id="submit">
-    <% if session[:tables_created] %>
+    <article id="submit">
       <%= submit_tag 'Run query', :name => 'run_query' %> /
       <%= submit_tag 'Drop tables, reset form', :name => 'logout', :id => 'logout',
         :confirm => "Are you sure you want to reset the form and drop all tables?" %>
-    <% else %>
+    </article>
+  <% end %>
+<% else %>
+  <% form_tag :action => :create_tables do %>
+    <%= render :partial => 'clients_schema', :object => session[:schema] %>
+    <%= render :partial => 'user_levels_schema', :object => session[:user_levels] %>
+    <article id="submit">
       <%= submit_tag 'Create tables', :name => 'create_tables' %>
-    <% end %>
-  </article>
+    </article>
+  <% end %>
 <% end %>

@@ -1,6 +1,7 @@
 class ModelBase
   ValueRegex = /^[^"']*$/
   TableNameRegex = /^[^"\-'\s]+$/
+  Classifications = ['U', 'C', 'S', 'TS']
   attr_reader :table_name, :schema, :columns, :data_lines
   
   def initialize(table_name, schema)
@@ -79,7 +80,7 @@ class ModelBase
           name_only = name[func_start+1...name.index(')')]
           matching_columns = @columns.select { |col| col.name.eql? name_only }
           next if matching_columns.length != 1
-          column = matching_columns.first
+          column = matching_columns.first.dup
           function = name[0...func_start]
           column.function = function
           selected_cols << column
@@ -145,4 +146,20 @@ class ModelBase
       sprintf("SHOW TABLES WHERE Tables_in_cs505 = '%s'", @table_name)
     ).fetch_row.nil?
   end
+  
+  protected
+    def get_classification_column_definition(column_name)
+      sprintf("%s ENUM('%s') NOT NULL DEFAULT '%s'", column_name,
+        Classifications.join("', '"), Classifications.first)
+    end
+    
+    def get_column_definition_string
+      @columns.map do |column|
+        if column.restricted?
+          get_classification_column_definition(column.name)
+        else
+          sprintf("%s %s", column.name, column.type)
+        end
+      end.join(', ')
+    end
 end

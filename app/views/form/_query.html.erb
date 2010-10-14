@@ -21,7 +21,9 @@
 FROM Clients
 WHERE amount BETWEEN 14000 AND 20000</pre>
       <p>Commas are not allowed in numeric values.  To select all columns,
-      please use <code>*</code> and not <code>clients.*</code>.</p>
+      please use <code>*</code> and not <code>clients.*</code>.  Functions
+      operating only on a column name, such as <code>SUM</code>, are accepted.
+      <code>GROUP BY</code> and <code>ORDER BY</code> are allowed.</p>
     </section>
   </fieldset>
 </article>

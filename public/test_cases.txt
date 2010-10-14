@@ -1,0 +1,39 @@
+I adopt the following convention: tables are listed as semicolon-separated data
+(one of the attributes in one of the tables is numerical. I use in it comma,
+thus it can not be used as a separator). The first line of the table is the
+metadata (scheme). After the attribute name I list the attribute type.
+I use * as a end-of-line separator.
+
+The scenario is that the tables are created for a small private bank in
+Switzerland. The table U_levels represents the security levels of analysts in
+the bank (observe that tellers would have to have access to the attribute
+"amount", and some users in our table Clients will not have such access, or
+not a complete access.)
+
+Table U_levels:
+
+name:varchar;class:varchar*
+alice;C*
+baxter;TS*
+dexter;S*
+marek;C*
+
+Table Clients
+
+lname:varchar;lClass:varchar;fname:varchar;fClass:varchar;amount:numeric(7,2);aClass:varchar;jurisdiction:varchar;jclass:varchar*
+al-gamal;C;selim;C;12,322.00;S;abu dhabi;S*
+bosch;C;hendrik;C;14,073.00;C;netherlands;C*
+ivanov;C;alexander;C;24,016.00;TS;russia;S*
+schmidt;C;johann;C;22,400.32;TS;germany;S*
+smith;C;john;C;15,000.17;S;australia;TS*
+
+
+The test query:
+
+SELECT lname, fname, jurisdiction FROM Clients WHERE amount BETWEEN 14,000 AND 20,000
+
+The correct answer to the query asked by user marek:
+
+ - - - - - - - - - - - - - - - - - -
+ bosch | hendrik | netherlands
+ smith | john    | NULL

@@ -13,6 +13,10 @@ a:hover {
 	text-decoration: underline;
 }
 
+article {
+	clear: both;
+}
+
 article,
 header,
 footer {
@@ -30,6 +34,10 @@ article#clients_schema {
 article#page-content {
 	padding: 0;
 	margin: 0;
+}
+
+article#query_summary {
+	background-color: #45ADA8;
 }
 
 article#result {
@@ -66,7 +74,7 @@ article#schema_summary {
 	
 		article#schema_summary table thead th {	
 			text-shadow: 1px 1px 1px #547980;
-			background-color: #45ADA8;
+			background-color: rgba(69, 173, 168, 0.6);
 			color: #9DE0AD;
 		}
 	
@@ -122,6 +130,28 @@ body {
 br.clear {
 	clear: both;
 	display: none;
+}
+
+div.column {
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	border-radius: 1em;
+	background-color: rgba(255, 255, 255, 0.1);
+	padding: 1em;
+	max-width: 45%;
+}
+
+	div.column *:last-child {
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+
+div.column.left {
+	float: left;
+	margin-right: 1em;
+}
+
+div.column.right {
+	float: left;
 }
 
 fieldset {
@@ -226,6 +256,10 @@ legend {
 		line-height: 1.8;
 	}
 
+h3 {
+	margin-bottom: 0.5625em;
+}
+
 header {
 	background-color: #594F4F;
 }
@@ -276,13 +310,22 @@ input[type=reset]:hover {
 input,
 textarea,
 pre,
-code {
+code,
+article#query_summary table tbody td {
 	font-family: "Lucida Console", "Andale Mono", "Courier New", monospace;
 }
 
 li:last-child {
 	margin-bottom: 0;
 }
+
+p {
+	margin-top: 0.5625em;
+}
+
+	p code {
+		font-size: 100%;
+	}
 
 p,
 li,
@@ -329,15 +372,27 @@ table {
 	margin: 0.3em 0 1.125em 0;
 }
 
-	table th,
-	table td {
+	table thead th,
+	table tbody td {
+		border-right: 1px dotted rgba(0, 0, 0, 0.1);
+		border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+	}
+	
+	table thead th:last-child,
+	table tbody td:last-child {
+		border-right: none;
+	}
+	
+	table tbody td {
 		padding: 0.2em 0.4em;
 	}
 	
-	table tbody td,
+	table tbody tr:last-child td {
+		border-bottom: none;
+	}
+	
 	table thead th {
-		border-top: 1px solid rgba(0, 0, 0, 0.3);
-		border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+		padding: 0.4em 1.2em;
 	}
 		
 textarea {
@@ -346,11 +401,11 @@ textarea {
 }
 
 textarea#schema {
-	height: 15em;
+	height: 15.5em;
 }
 
 textarea#user_levels {
-	height: 12em;
+	height: 13.5em;
 }
 
 /* No text shadow because of http://twitter.com/miketaylr/status/12228805301 */

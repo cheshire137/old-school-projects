@@ -14,7 +14,12 @@
     <% rows.each do |row_hash| %>
       <tr class="<%= cycle('even', 'odd') %>">
         <% columns.each do |field_name| %>
-          <td><%= row_hash[field_name] %></td>
+          <td><%=
+          if (value = row_hash[field_name]).nil?
+            '<em>NULL</em>'
+          else
+            value
+          end %></td>
         <% end %>
       </tr>
     <% end %>

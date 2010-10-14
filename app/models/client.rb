@@ -20,9 +20,7 @@ class Client < ModelBase
     # Don't know what kind of PRIMARY KEY would work because user could give
     # any kind of table schema, unlike with user_levels table where two
     # columns are required.
-    super(sprintf("%s",
-      @columns.map { |col| "#{col.name} #{col.type}" }.join(', ')
-    ))
+    super(get_column_definition_string())
   end
   
   def Client.describe
@@ -53,35 +51,40 @@ class Client < ModelBase
     queried_columns = get_columns_by_name(words[1...from_index])
     check_queried_columns(queried_columns)
     if words.length < from_index+1
+      # Even though we're going to ignore the table name they gave, we still
+      # want the user to have given a well-formed query
       raise "Invalid query, no table name specified"
     end
     if words[from_index+1].downcase.eql? 'user_levels'
+      # Ensure user isn't trying to query from the secret user classification
+      # levels table
       raise "Invalid query, cannot query user classification table"
     end
     query = sprintf(
       "SELECT %s
-       FROM clients,
-            (
-              SELECT UPPER(class) AS class
-              FROM user_levels
-              WHERE name = '%s'
-            ) AS user_level
-       %s",
+FROM clients,
+     (
+       SELECT class
+       FROM user_levels
+       WHERE name = '%s'
+     ) AS user_level
+%s",
       get_case_statements(queried_columns),
       user_name,
       words[from_index+2...words.length].join(' ') # Append the last of user-given query
     )
-    ModelBase.execute(query)
+    # Return the generated query and the results of executing that query
+    [query, ModelBase.execute(query)]
   end
   
   private
     def check_queried_columns(queried_columns)
-      valid_columns = get_queryable_columns()
+      valid_column_names = get_queryable_columns().map(&:name)
       queried_columns.each do |column|
-        unless valid_columns.include? column
+        unless valid_column_names.include? column.name
           raise sprintf("Invalid column '%s' in query, only %s allowed",
             column.name,
-            valid_columns.map(&:name).join(', '))
+            valid_column_names.join(', '))
         end
       end
     end
@@ -115,21 +118,22 @@ class Client < ModelBase
           )
         end
         sprintf(
-          "%s
-             CASE WHEN %s = class OR
-                       class = 'TS' OR
-                       (class = 'S' AND %s = 'C')
-                  THEN %s
-                  ELSE NULL
-             END
-           %s AS \"%s\"",
+          "%s CASE WHEN %s = class OR
+                  class = 'TS' OR
+                  (class = 'S' AND (%s = 'C' OR %s = 'U')) OR
+                  (class = 'C' AND %s = 'U')
+             THEN %s
+             ELSE NULL
+        END %s AS \"%s\"",
           func_start,
+          class_column,
+          class_column,
           class_column,
           class_column,
           column.name,
           func_end,
           selected_name
         )
-      end.join(', ')
+      end.join(",\n       ")
     end
 end
