@@ -1,6 +1,10 @@
+# Represents the user_levels table and provides methods for creating, dropping,
+# and populating it.
 class UserLevel < ModelBase
   TableName = "user_levels"
   
+  # Constructor taking a table schema.  Expects a 'class' column to be defined
+  # in the schema.
   def initialize(schema)
     super(TableName, schema)
     if @columns.length != 2
@@ -12,6 +16,7 @@ class UserLevel < ModelBase
     end
   end
   
+  # Creates the user_levels table using the schema given in the constructor.
   def create_table
     super(
       sprintf(
@@ -22,10 +27,12 @@ class UserLevel < ModelBase
     )
   end
   
+  # Returns a MySQL result set describing the user_levels table.
   def UserLevel.describe
     ModelBase.execute(sprintf("DESCRIBE %s;", TableName))
   end
   
+  # Drops the user_levels table.
   def UserLevel.drop_table
     super(TableName)
   end
