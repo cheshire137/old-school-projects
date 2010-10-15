@@ -51,6 +51,38 @@ class ClientTest < ActiveSupport::TestCase
     gen_query, rows, columns = client.run_query('marek', query)
     assert_equal 2, rows.length
     assert_equal nil, rows[1]['jurisdiction']
+    assert_equal 'bosch', rows[0]['lname']
+    
+    # Destroy tables
+    UserLevel.drop_table
+    Client.drop_table
+  end
+  
+  test "alice run_query" do
+    # Create tables, load data
+    client = Client.new "lname:varchar(25);lClass:varchar(2);fname:varchar(25);
+      fClass:varchar(2);amount:numeric(7,2);aClass:varchar(2);
+      jurisdiction:varchar(25);jclass:varchar(2)*
+      al-gamal;C;selim;C;12,322.00;S;germany;S*
+      bosch;C;hendrik;C;14,073.00;C;netherlands;C*
+      ivanov;C;alexander;C;24,016.00;TS;germany;S*
+      schmidt;C;johann;C;22,400.32;TS;germany;S*
+      smith;C;john;C;15,000.17;S;australia;TS*"
+    ul = UserLevel.new "name:varchar(25);class:varchar(2)*
+      alice;U*baxter;TS*dexter;S*marek;C*"
+    client.create_table
+    ul.create_table
+    client.load_data
+    ul.load_data
+    
+    # Ensure alice can't see any data
+    query = "SELECT * FROM Clients"
+    gen_query, rows, columns = client.run_query('alice', query)
+    rows.each do |row|
+      columns.each do |column|
+        assert_equal nil, row[column]
+      end
+    end
     
     # Destroy tables
     UserLevel.drop_table
