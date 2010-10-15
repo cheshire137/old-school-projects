@@ -69,6 +69,10 @@ class FormController < ApplicationController
         get_rows_and_columns(Client.describe)
       @user_levels_desc_rows, @user_levels_desc_cols =
         get_rows_and_columns(UserLevel.describe)
+      @clients_rows, @clients_cols =
+        get_rows_and_columns(ModelBase.execute("SELECT * FROM clients;"))
+      @user_levels_rows, @user_levels_cols =
+        get_rows_and_columns(ModelBase.execute("SELECT * FROM user_levels;"))
     end
   rescue => error # Catch any exceptions
     render :text => error
@@ -120,6 +124,10 @@ class FormController < ApplicationController
       return
     end
     
+    # Reset session values in case something goes awry.
+    session[:result] = nil
+    session[:generated_query] = nil
+    
     # Ensure we have an instance of the Client class so we can run the user's
     # query.
     if session[:client].nil?
@@ -133,17 +141,11 @@ class FormController < ApplicationController
     check_params({:query => "Missing query",
       :user_name => "Missing user name"})
     
-    # Reset the result of the query in the session in case something goes awry.
-    session[:result] = nil
-    
     # Try to generate a query based on the user's query, run that query, and
-    # get the results.
-    session[:generated_query], mysql_result =
+    # get the results.  Store the rows and columns of the query result in the
+    # session so they can be displayed in an HTML table later.
+    session[:generated_query], session[:result], session[:columns] =
       session[:client].run_query(session[:user_name], session[:query])
-      
-    # Store the rows and columns of the query result in the session so they
-    # can be displayed in an HTML table later.
-    session[:result], session[:columns] = get_rows_and_columns(mysql_result)
     
     # Redirect the user back to the index page, which will show the query
     # results.

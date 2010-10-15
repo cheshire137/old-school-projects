@@ -1,12 +1,23 @@
 <article id="schema_summary">
-  <h2>Existing Table Schemas</h2>
-  <section>
+  <h2>Existing Table Schemas and Data</h2>
+  <p>This is provided for your use in testing polyinstantiation, so you can tell
+  what data <em>should</em> be returned by your query.</p>
+  <div class="left column">
     <%= render :partial => 'table', :locals => {:rows => @clients_desc_rows,
       :columns => @clients_desc_cols, :title => 'clients'} %>
-  </section>
-  <section>
+  </div>
+  <div class="right column">
     <%= render :partial => 'table', :locals => {:rows => @user_levels_desc_rows,
       :columns => @user_levels_desc_cols, :title => 'user_levels'} %>
-  </section>
-  <br style="clear:both;">
+  </div>
+  <br style="clear: both;">
+  <div class="left column">
+    <%= render :partial => 'table', :locals => {:rows => @clients_rows,
+      :columns => @clients_cols, :title => 'Data in clients'} %>
+  </div>
+  <div class="right column">
+    <%= render :partial => 'table', :locals => {:rows => @user_levels_rows,
+      :columns => @user_levels_cols, :title => 'Data in user_levels'} %>
+  </div>
+  <br style="clear: both;">
 </article>

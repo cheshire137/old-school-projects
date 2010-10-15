@@ -68,6 +68,12 @@ article#schema_summary {
 	background-color: #547980;
 }
 
+	article#schema_summary div {
+		border: none;
+		padding: 0;
+		background-color: transparent;
+	}
+
 	article#schema_summary table {
 		margin-bottom: 0;
 	}
@@ -137,7 +143,6 @@ div.column {
 	border-radius: 1em;
 	background-color: rgba(255, 255, 255, 0.1);
 	padding: 1em;
-	max-width: 45%;
 }
 
 	div.column *:last-child {
@@ -371,6 +376,10 @@ section#notice {
 table {
 	margin: 0.3em 0 1.125em 0;
 }
+
+	table caption {
+		white-space: nowrap;
+	}
 
 	table thead th,
 	table tbody td {

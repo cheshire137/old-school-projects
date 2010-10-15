@@ -91,8 +91,19 @@ FROM clients,
       words[from_index+2...words.length].join(' ') # Last part of the query
     )
     
-    # Return the generated query and the results of executing that query
-    [query, ModelBase.execute(query)]
+    # Get the results of the query as an array of hashes
+    nice_rows, column_names = ModelBase.get_rows_and_column_names(
+      ModelBase.execute(query)
+    )
+    
+    # Return the generated query, the results of executing that query, and the
+    # column names
+    [query, nice_rows, column_names]
+  end
+  
+  # Returns true if the clients table exists in the database.
+  def Client.table_exists?
+    super(TableName)
   end
   
   # All methods below this will be private to this class

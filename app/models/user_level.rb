@@ -36,4 +36,9 @@ class UserLevel < ModelBase
   def UserLevel.drop_table
     super(TableName)
   end
+  
+  # Returns true if the user_levels table exists in the database.
+  def UserLevel.table_exists?
+    super(TableName)
+  end
 end

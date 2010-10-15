@@ -1,6 +1,6 @@
 <% unless session[:result].nil? %>
   <%= render :partial => 'results', :object => session[:result],
-    :locals => {:columns => session[:columns]} %>
+    :locals => {:columns => session[:columns], :user => session[:user_name]} %>
 <% end %>
 
 <% if session[:tables_created] %>

@@ -184,6 +184,33 @@ class ModelBase
     def get_queryable_columns
       @columns.select { |col| !col.restricted? }
     end
+    
+    # Given a MySQL result, this will extract column names and return both the
+    # column names and hashes of the values in each row of the results.
+    def ModelBase.get_rows_and_column_names(mysql_result)
+      rows = []
+      while row = mysql_result.fetch_hash do
+        rows << row
+      end
+      columns = mysql_result.fetch_fields.map(&:name)
+      
+      # Return the row hashes and the column names
+      [rows, columns]
+    end
+    
+    # Returns true if a table with the given table name exists.
+    def ModelBase.table_exists?(table_name)
+      if table_name.nil? || table_name.blank?
+        raise "Invalid table name, cannot be nil or blank"
+      end
+      if (TableNameRegex =~ table_name).nil?
+        raise "Invalid table name, cannot contain quotes, hyphens, or spaces"
+      end
+      db_name = ActiveRecord::Base.connection.current_database
+      !execute(
+        sprintf("SHOW TABLES WHERE Tables_in_%s = '%s'", db_name, table_name)
+      ).fetch_row.nil?
+    end
   
   # All methods below this will be private to this class.
   private
