@@ -10,7 +10,7 @@ class ModelBase
   def initialize(schema, table_name=nil)
     # Check parameters
     if !table_name.nil? && (TableNameRegex =~ table_name).nil?
-      raise "Invalid table name, cannot contain quotes, hyphens, or spaces"
+      raise "Invalid table name #{table_name}, cannot contain quotes, hyphens, or spaces"
     end
     if schema.nil? || schema.blank?
       raise "Invalid table schema, cannot be nil or blank"
@@ -107,20 +107,10 @@ class ModelBase
       ModelBase.drop_table(@table_name)
     end
   
-    # Returns a MySQL column definition string for the given column name.
-    def ModelBase.get_classification_column_definition(column_name)
-      sprintf("%s ENUM('%s') NOT NULL DEFAULT '%s'", column_name,
-        Classifications.join("', '"), Classifications.first)
-    end
-    
     # Returns a MySQL column definition string for all columns in the table.
     def get_column_definition_string
       @columns.map do |column|
-        if column.restricted?
-          ModelBase.get_classification_column_definition(column.name)
-        else
-          sprintf("%s %s", column.name, column.type)
-        end
+        sprintf("%s %s", column.name, column.type)
       end.join(', ')
     end
     
@@ -135,8 +125,7 @@ class ModelBase
           # spaces
           names.split!(',')
         elsif name.eql? '*'
-          # User querying all columns, so return all non-classification columns
-          return @columns.select { |col| !col.restricted? }
+          return @columns
         end
       end
       # Lowercase all the given column names, remove trailing commas
@@ -175,12 +164,6 @@ class ModelBase
       selected_cols
     end
     
-    # Returns all Column instances for this table that are not classification
-    # columns.
-    def get_queryable_columns
-      @columns.select { |col| !col.restricted? }
-    end
-    
     # Given a MySQL result, this will extract column names and return both the
     # column names and hashes of the values in each row of the results.
     def ModelBase.get_rows_and_column_names(mysql_result)
@@ -191,7 +174,7 @@ class ModelBase
       columns = mysql_result.fetch_fields.map(&:name)
       
       # Return the row hashes and the column names
-      [rows, columns]
+      {:rows => rows, :columns => columns}
     end
     
     # Returns true if a table with the given table name exists.

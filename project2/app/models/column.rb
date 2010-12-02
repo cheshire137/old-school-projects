@@ -1,9 +1,9 @@
 # Represents a column in a table.  Provides methods to determine the type of the
 # column as well as ensure good data.
 class Column
+  IntRegex = /^int/
   NameRegex = /^[a-zA-Z]+[a-zA-Z0-9]+$/
   RangeRegex = /(\(\d+\)$)|(\(\d,\d\)$)/
-  RestrictedRegex = /class$/
   NumericRegex = /^numeric/
   VarcharRegex = /^varchar/
   
@@ -39,10 +39,9 @@ class Column
       raise "Invalid field type--no range specified on #{type}"
     end
     
-    # Ensure the type is either numeric or a varchar, the only two allowed
-    # user-given types
-    unless type.starts_with?('numeric') || type.starts_with?('varchar')
-      raise "Invalid field type #{type}, expected only numeric or varchar"
+    # Ensure the type is numeric, int, or a varchar
+    if (@type =~ NumericRegex).nil? && (@type =~ IntRegex).nil? && (@type =~ VarcharRegex).nil?
+      raise "Invalid field type #{type}, expected only numeric, int, or varchar"
     end
     
     # Store the given data in member variables
@@ -51,24 +50,9 @@ class Column
     @function = nil
   end
   
-  # Returns the name of the associated classification column for this column,
-  # based on this column's name.  If this column is itself a classification
-  # column, nil is returned.
-  def get_class_column
-    if restricted?
-      return nil
-    end
-    @name.first + 'class'
-  end
-  
-  # Returns true if this is a classification column.
-  def restricted?
-    !(@name =~ RestrictedRegex).nil?
-  end
-  
   # Returns true if this column is a numeric type.
   def numeric?
-    !(@type =~ NumericRegex).nil?
+    !(@type =~ NumericRegex).nil? || !(@type =~ IntRegex).nil?
   end
   
   # Returns true if this column is a varchar type.

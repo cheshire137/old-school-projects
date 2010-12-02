@@ -63,7 +63,7 @@ class FormController < ApplicationController
   # When the user visits this page, their session data will be cleared, the
   # tables will be dropped, and then they will be redirected to the index page.
   def logout
-    ColumnarDistribution.drop_tables
+    session[:cd].drop_tables if session[:cd]
     
     # Wipe the session
     session[:generated_query] = nil
@@ -161,18 +161,5 @@ class FormController < ApplicationController
       end
       # Throw an exception unless all required fields were given
       raise error_messages.join(', ') unless all_given
-    end
-    
-    # Given a MySQL result, this will extract column names and return both the
-    # column names and hashes of the values in each row of the results.
-    def get_rows_and_columns(mysql_result)
-      rows = []
-      while row = mysql_result.fetch_hash do
-        rows << row
-      end
-      columns = mysql_result.fetch_fields.map(&:name)
-      
-      # Return the row hashes and the column names
-      [rows, columns]
     end
 end
