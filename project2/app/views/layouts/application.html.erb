@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>CS 505 - Sarah Vessels - Project 2 - Fall 2010</title>
+<%= stylesheet_link_tag 'reset' %>
+<%= stylesheet_link_tag 'common' %>
+<%= javascript_include_tag :defaults %>
+</head>
+<body>
+<header id="page-header">
+    <h1>
+      <%= link_to('CS 505 - Sarah Vessels - Project 2 - Fall 2010',
+        :controller => :form) %>
+      <span>
+        <%= link_to('Documentation', '/doc/index.html') %>
+      </span>
+    </h1>
+    <% if params.has_key?(:error) && !params[:error].blank? %>
+      <section id="error">
+        <%=h params[:error] %>
+      </section>
+    <% end %>
+    <% if params.has_key?(:notice) && !params[:notice].blank? %>
+      <section id="notice">
+        <%=h params[:notice] %>
+      </section>
+    <% end %>
+</header>
+<article id="page-content">
+  <%= yield %>
+</article>
+<footer>
+    <ul>
+        <li>&copy; 2010 Sarah Vessels</li>
+        <li>Built using <%= link_to 'Ruby on Rails',
+        'http://rubyonrails.org/' %> and <%= link_to 'Prototype',
+        'http://www.prototypejs.org/' %></li>
+        <li>Thanks to <%= link_to 'ColourLovers',
+        'http://www.colourlovers.com/' %> and user <%= link_to 'ruecian',
+        'http://www.colourlovers.com/lover/ruecian' %> for the color scheme
+        &ldquo;<%= link_to 'Machu Picchu',
+        'http://www.colourlovers.com/palette/100694/Machu_Picchu' %>&rdquo;</li>
+    </ul>
+</footer>
+</body>
+</html>

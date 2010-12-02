@@ -1,0 +1,20 @@
+<article id="schema_summary">
+  <h2>Existing Table Schemas and Data</h2>
+  <p>This is provided for your use in testing polyinstantiation, so you can tell
+  what data <em>should</em> be returned by your query.</p>
+  <% @tables_desc.each do |table_desc| %>
+    <div class="left column">
+      <%= render :partial => 'table', :locals => {:rows => table_desc[:rows],
+        :columns => table_desc[:columns], :title => table_desc[:title]} %>
+    </div>
+    <br style="clear: both;">
+  <% end %>
+  <% @tables_data.each do |table_data| %>
+    <div class="left column">
+      <%= render :partial => 'table', :locals => {:rows => table_data[:rows],
+        :columns => table_data[:columns],
+        :title => 'Data in ' + table_data[:title]} %>
+    </div>
+    <br style="clear: both;">
+  <% end %>
+</article>

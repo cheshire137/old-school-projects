@@ -1,0 +1,29 @@
+<% unless session[:result].nil? %>
+  <%= render :partial => 'results', :object => session[:result],
+    :locals => {:columns => session[:columns]} %>
+<% end %>
+
+<% if session[:tables_created] %>
+  <% form_tag :action => :run_query do %>
+    <%= render :partial => 'query', :object => session[:query] %>
+    <% unless session[:query].nil? || session[:generated_query].nil? %>
+      <%= render :partial => 'query_summary',
+        :locals => {:given_query => session[:query],
+          :generated_query => session[:generated_query]} %>
+    <% end %>
+    <%= render :partial => 'schema_summary',
+      :locals => {:tables => @tables} %>
+    <article id="submit">
+      <%= submit_tag 'Run query', :name => 'run_query' %> /
+      <%= submit_tag 'Drop table, reset form', :name => 'logout', :id => 'logout',
+        :confirm => "Are you sure you want to reset the form and drop your table?" %>
+    </article>
+  <% end %>
+<% else %>
+  <% form_tag :action => :create_table do %>
+    <%= render :partial => 'schema', :object => session[:schema] %>
+    <article id="submit">
+      <%= submit_tag 'Create table', :name => 'create_table' %>
+    </article>
+  <% end %>
+<% end %>

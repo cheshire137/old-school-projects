@@ -1,0 +1,9 @@
+<article id="result">
+  <h2>Results as <code><%= user %></code></h2>
+  <% if results.empty? %>
+    <p>Your query had no results.</p>
+  <% else %>
+    <%= render :partial => 'table', :locals => {:rows => results,
+      :columns => columns} %>
+  <% end %>
+</article>

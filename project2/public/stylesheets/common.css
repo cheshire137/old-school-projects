@@ -1,0 +1,428 @@
+a,
+a:link {
+	color: #604848;
+	text-decoration: none;
+}
+
+a:visited,
+a:active {
+	color: #604848;
+}
+
+a:hover {
+	text-decoration: underline;
+}
+
+article {
+	clear: both;
+}
+
+article,
+header,
+footer {
+	padding: 1.5em 1.5em 1.5em 12%;
+	margin: 0 2em 1.375em 0;
+	color: black;
+	border-bottom-right-radius: 1em;
+	border-top-right-radius: 1em;
+}
+
+article#page-content {
+	padding: 0;
+	margin: 0;
+}
+
+article#query_summary {
+	background-color: #45ADA8;
+}
+
+article#result {
+	background-color: #E5FCC2;
+}
+
+	article#result table {
+		font-size: 1.3em;
+		margin-bottom: 0;
+	}
+	
+		article#result table thead th {	
+			text-shadow: 1px 1px 1px #C0D860;
+			background-color: rgba(255, 255, 255, 0.3);
+			color: #547980;
+		}
+	
+		article#result table tbody tr:hover td,
+		article#result table tbody tr.odd:hover td {
+			background-color: #C0D860;
+		}
+		
+		article#result table tbody tr.odd td {
+			background-color: rgba(157, 224, 173, 0.3);
+		}
+
+article#schema {
+	background-color: #C0D860;
+}
+
+article#schema_summary {
+	background-color: #547980;
+}
+
+	article#schema_summary div {
+		border: none;
+		padding: 0;
+		background-color: transparent;
+	}
+
+	article#schema_summary table {
+		margin-bottom: 0;
+	}
+	
+		article#schema_summary table thead th {	
+			text-shadow: 1px 1px 1px #547980;
+			background-color: rgba(69, 173, 168, 0.6);
+			color: #C0D860;
+		}
+	
+		article#schema_summary table tbody tr:hover td,
+		article#schema_summary table tbody tr.even:hover td {
+			background-color: #C0D860;
+		}
+		
+		article#schema_summary table tbody tr.even td {
+			background-color: rgba(229, 252, 194, 0.2);
+		}
+
+article#submit,
+article#submit:hover {
+	color: #C0D860 !important;
+}
+
+article#submit {
+	position: fixed;
+	background-color: #607848;
+	left: 0;
+	margin-bottom: 0;
+	-moz-box-shadow: 0 -1px 5px #494949;
+	-webkit-box-shadow: 0 -1px 5px #494949;
+	box-shadow: 0 -1px 5px black;
+	bottom: 0;
+	width: 100%;
+	opacity: 0.9;
+	height: 3.75em;
+}
+
+	input#logout {
+		font-size: 0.9em;
+	}
+
+body {
+	background-color: #604848;
+	font: 0.875em/1.3 "Tahoma", "Verdana", sans-serif;
+}
+
+br.clear {
+	clear: both;
+	display: none;
+}
+
+div.column {
+	border: 1px solid rgba(0, 0, 0, 0.3);
+	border-radius: 1em;
+	background-color: rgba(255, 255, 255, 0.1);
+	padding: 1em;
+}
+
+	div.column *:last-child {
+		margin-bottom: 0;
+		padding-bottom: 0;
+	}
+
+div.column.left {
+	float: left;
+	margin-right: 1em;
+}
+
+div.column.right {
+	float: left;
+}
+
+fieldset {
+	padding-top: 1.125em;
+	position: relative;
+	width: 100%;
+}
+
+	fieldset label {
+		display: inline-block;
+		width: 6em;
+		font-weight: bold;
+		vertical-align: top;
+	}
+
+	fieldset ol {
+		float: left;
+		margin-right: 1.375em;
+		width: 31em;
+	}
+
+footer,
+header {
+	margin-top: 1.375em;
+}
+
+footer {
+	background-color: #789048;
+	color: #C0D860;
+}
+
+	footer a,
+	footer a:link,
+	footer a:active,
+	footer a:visited {
+		color: #F0F0D8;
+		text-decoration: underline;
+	}
+	
+	footer a:hover {
+		text-decoration: none;
+		color: #604848;
+	}
+
+	footer ul {
+		margin: 0;
+		padding: 0;
+	}
+	
+		footer ul li {
+			list-style: none;
+			display: inline;
+			border-right: 3px solid rgba(0, 0, 0, 0.2);
+			padding: 0 1em;
+		}
+		
+		footer ul li:first-child {
+			padding-left: 0;
+		}
+		
+		footer ul li:last-child {
+			border-right: none;
+			padding-right: 0;
+		}
+
+h1 {
+	font-size: 1.75em;
+}
+
+	h1 span {
+		float: right;
+		font-size: 0.5em;
+		line-height: 2.33;
+		font-weight: normal;
+	}
+	
+		h1 span a,
+		h1 span a:link,
+		h1 span a:visited,
+		h1 span a:active {
+			color: rgba(255, 255, 255, 0.5);
+		}
+
+h1 a:hover,
+h2 a:hover {
+	text-decoration: none;
+}
+
+h2,
+legend,
+section#error,
+section#notice,
+table caption {
+	font-size: 1.375em; /* 16x1.375=22px */
+}
+
+h2,
+legend {
+	text-transform: uppercase;
+	font-weight: normal;
+	border-bottom: 1px dotted rgba(0, 0, 0, 0.5);
+	width: 100%;
+}
+
+	h2 a,
+	legend a,
+	h2 a:link,
+	legend a:link,
+	h2 a:active,
+	legend a:active,
+	h2 a:visited,
+	legend a:visited {
+		text-transform: none;
+		color: rgba(0, 0, 0, 0.6);
+		font-size: 0.8em;
+		line-height: 1.8;
+	}
+
+h3 {
+	margin-bottom: 0.5625em;
+}
+
+header {
+	background-color: #F0F0D8;
+}
+
+html {
+	padding-bottom: 6.25em;
+}
+
+input,
+textarea {
+	background-color: rgba(0, 0, 0, 0.1);
+	border: none;
+	color: inherit;
+	-moz-border-radius: 0.5em;
+	border-radius: 0.5em;
+	padding: 0.3em;
+	font-size: 100%;
+}
+
+input:active,
+textarea:active,
+input:focus,
+textarea:focus,
+input:hover,
+textarea:hover {
+	background-color: rgba(0, 0, 0, 0.2);
+}
+
+input[type=submit],
+input[type=reset] {
+	font-size: 200%;
+	padding: 0.3em 0.6em;
+	cursor: pointer;
+	background-color: rgba(0, 0, 0, 0.3);
+	font-family: "Tahoma", "Verdana", sans-serif;
+}
+
+input[type=submit]:active,
+input[type=reset]:active,
+input[type=submit]:focus,
+input[type=reset]:focus,
+input[type=submit]:hover,
+input[type=reset]:hover {
+	cursor: pointer;
+	background-color: rgba(0, 0, 0, 0.5);
+}
+
+input,
+textarea,
+pre,
+code,
+article#query_summary table tbody td {
+	font-family: "Lucida Console", "Andale Mono", "Courier New", monospace;
+}
+
+li:last-child {
+	margin-bottom: 0;
+}
+
+p {
+	margin-top: 0.5625em;
+}
+
+	p code {
+		font-size: 100%;
+	}
+
+p,
+li,
+pre {
+	margin-bottom: 1.125em;
+}
+
+ol {
+}
+
+	ol li {
+		width: 100%;
+		list-style: none;
+	}
+
+pre,
+code {
+	font-size: 0.875em;
+}
+
+section {
+	float: left;
+	width: 35em;
+	overflow: auto;
+}
+
+section#error,
+section#notice {
+	float: none;
+	padding: 0.2em 0.4em;
+	margin-top: 0.5625em;
+	background-color: rgba(255, 255, 255, 0.2);
+}
+
+section#error {
+	color: #FF7355;
+}
+
+section#notice {
+	color: #C0D860;
+}
+
+table {
+	margin: 0.3em 0 1.125em 0;
+}
+
+	table caption {
+		white-space: nowrap;
+	}
+
+	table thead th,
+	table tbody td {
+		border-right: 1px dotted rgba(0, 0, 0, 0.1);
+		border-bottom: 1px solid rgba(0, 0, 0, 0.3);
+	}
+	
+	table thead th:last-child,
+	table tbody td:last-child {
+		border-right: none;
+	}
+	
+	table tbody td {
+		padding: 0.2em 0.4em;
+	}
+	
+	table tbody tr:last-child td {
+		border-bottom: none;
+	}
+	
+	table thead th {
+		padding: 0.4em 1.2em;
+	}
+		
+textarea {
+	width: 30em;
+	height: 5.5em;
+}
+
+textarea#schema {
+	height: 15.5em;
+}
+
+/* No text shadow because of http://twitter.com/miketaylr/status/12228805301 */
+::-moz-selection	 {
+  background-color: #c0c0c0;
+  color: #202020;
+  text-shadow: none;
+}
+::selection {
+  background-color: #c0c0c0;
+  color: #202020;
+  text-shadow: none;
+}
