@@ -16,7 +16,9 @@ class FormController < ApplicationController
     check_params({:schema => "Missing table schema"})
     
     # Drop and recreate the tables, filling it with data.
-    ColumnarDistribution.drop_table
+    unless session[:cd].nil?
+      session[:cd].drop_tables
+    end
     cd = ColumnarDistribution.new(session[:schema])
     cd.create_tables
     cd.load_data
