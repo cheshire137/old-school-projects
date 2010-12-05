@@ -19,7 +19,8 @@ WHERE (lname LIKE 's%') AND NOT (jurisdiction = 'italy');</pre>
       please use <code>*</code> and not <code>table_name.*</code>.  Functions
       operating only on a column name, such as <code>SUM</code>, are accepted.
       <code>GROUP BY</code> and <code>ORDER BY</code> are allowed.
-      <code>COUNT(*)</code> is ignored.</p>
+      <code>COUNT(*)</code> is ignored, as is <code>COUNT(DISTINCT
+      some_column)</code>.</p>
     </section>
   </fieldset>
 </article>

@@ -1,3 +1,5 @@
+require 'matrix'
+
 class ColumnarDistribution < ModelBase
   KeyFieldName = 'id'.freeze
   attr_reader :tables
@@ -153,11 +155,9 @@ FROM %s
             last_col_name = @columns.last.name
             super(
               sprintf(
-                "%s, PRIMARY KEY (%s), UNIQUE index_%s (%s)",
+                "%s, PRIMARY KEY (%s)",
                 get_column_definition_string(),
-                @columns.first.name,
-                last_col_name,
-                last_col_name
+                @columns.first.name
               )
             )
           end
@@ -219,21 +219,8 @@ FROM %s
     
     def self.pivot_data(data)
       return [] if data.nil?
-      column_data = []
-      data.each do |line|
-        line.split(';').each_with_index do |col_value, i|
-          if i > column_data.length-1
-            column_data << []
-          end
-          # Only append column value if it's not already set to be a row in
-          # the new table--part of the point of columnar distribution is to
-          # reduce duplication of column values
-          unless column_data[i].include?(col_value)
-            column_data[i] << col_value
-          end
-        end
-      end
-      column_data
+      column_values = data.collect { |line| line.split(';') }
+      Matrix.rows(column_values).transpose.to_a
     end
     
     def self.get_where_block(tables, query_remainder)
