@@ -1,4 +1,4 @@
-<article id="query">
+<article id="query-container">
   <fieldset>
     <legend>
       SELECT Query /
@@ -14,11 +14,12 @@
     <section>
       <pre id="query_example">SELECT lname, fname, jurisdiction
 FROM Clients
-WHERE amount BETWEEN 14000 AND 20000</pre>
+WHERE (lname LIKE 's%') AND NOT (jurisdiction = 'italy');</pre>
       <p>Commas are not allowed in numeric values.  To select all columns,
-      please use <code>*</code> and not <code>clients.*</code>.  Functions
+      please use <code>*</code> and not <code>table_name.*</code>.  Functions
       operating only on a column name, such as <code>SUM</code>, are accepted.
-      <code>GROUP BY</code> and <code>ORDER BY</code> are allowed.</p>
+      <code>GROUP BY</code> and <code>ORDER BY</code> are allowed.
+      <code>COUNT(*)</code> is ignored.</p>
     </section>
   </fieldset>
 </article>

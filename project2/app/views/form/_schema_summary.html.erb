@@ -1,16 +1,14 @@
 <article id="schema_summary">
   <h2>Existing Table Schemas and Data</h2>
-  <p>This is provided for your use in testing polyinstantiation, so you can tell
-  what data <em>should</em> be returned by your query.</p>
-  <% @tables_desc.each do |table_desc| %>
+  <p>This is provided for your use in testing vertical partitioning, so you can
+  tell what data <em>should</em> be returned by your query.</p>
+  <% @tables_desc.each_with_index do |table_desc, i|
+    table_data = @tables_data[i] %>
     <div class="left column">
       <%= render :partial => 'table', :locals => {:rows => table_desc[:rows],
         :columns => table_desc[:columns], :title => table_desc[:title]} %>
     </div>
-    <br style="clear: both;">
-  <% end %>
-  <% @tables_data.each do |table_data| %>
-    <div class="left column">
+    <div class="right column">
       <%= render :partial => 'table', :locals => {:rows => table_data[:rows],
         :columns => table_data[:columns],
         :title => 'Data in ' + table_data[:title]} %>

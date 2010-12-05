@@ -11,14 +11,14 @@
     </ol>
     <section>
       <p>For example:</p>
-      <pre id="schema_example">lname:varchar(25);lClass:varchar(2);fname:varchar(25);
-fClass:varchar(2);amount:numeric(7,2);aClass:varchar(2);
-jurisdiction:varchar(25);jclass:varchar(2)*
-al-gamal;C;selim;C;12,322.00;S;abu dhabi;S*
-bosch;C;hendrik;C;14,073.00;C;netherlands;C*
-ivanov;C;alexander;C;24,016.00;TS;russia;S*
-schmidt;C;johann;C;22,400.32;TS;germany;S*
-smith;C;john;C;15,000.17;S;australia;TS*</pre>
+      <pre id="schema_example">lname:varchar(16);fname:varchar(16);amount:numeric(7,2);
+    jurisdiction:varchar(16)*
+al-gamal;selim;12,322.00;abu dhabi*
+bosch;hendrik;14,000.00;netherlands*
+corso;giovanni;14,073.00;italy*
+ivanov;alexander;14,000.00;russia*
+schmidt;johann;22,400.32;germany*
+smith;john;15,000.17;australia*</pre>
       <p>Commas will be stripped from numeric values.</p>
     </section>
   </fieldset>

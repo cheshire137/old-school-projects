@@ -115,10 +115,8 @@ class ModelBase
     end
     
     def get_columns_by_name(names)
-      if names.nil? || names.empty?
-        return []
-      end
-      if names.length.eql? 1
+      return [] if names.nil? || names.empty?
+      if names.length == 1
         name = names.first
         if name.include? ','
           # In case columns were listed in query as only comma-separated, with no
@@ -145,7 +143,7 @@ class ModelBase
             
             # Ensure the column to which the function was applied is an actual
             # column in the table before we proceed.
-            matching_columns = @columns.select { |col| col.name.eql? name_only }
+            matching_columns = @columns.select { |col| col.name == name_only }
             next if matching_columns.length != 1
             
             # Copy the matching Column instance before we go setting its

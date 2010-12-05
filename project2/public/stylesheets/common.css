@@ -32,12 +32,17 @@ article#page-content {
 	margin: 0;
 }
 
+article#query-container {
+	background-color: #607848;
+	color: #F0F0D8;
+}
+
 article#query_summary {
-	background-color: #45ADA8;
+	background-color: #C0D860;
 }
 
 article#result {
-	background-color: #E5FCC2;
+	background-color: #789048;
 }
 
 	article#result table {
@@ -46,9 +51,9 @@ article#result {
 	}
 	
 		article#result table thead th {	
-			text-shadow: 1px 1px 1px #C0D860;
+			text-shadow: 1px 1px 1px #607848;
 			background-color: rgba(255, 255, 255, 0.3);
-			color: #547980;
+			color: #F0F0D8;
 		}
 	
 		article#result table tbody tr:hover td,
@@ -57,7 +62,7 @@ article#result {
 		}
 		
 		article#result table tbody tr.odd td {
-			background-color: rgba(157, 224, 173, 0.3);
+			background-color: rgba(240, 240, 216, 0.3);
 		}
 
 article#schema-container {
@@ -65,32 +70,34 @@ article#schema-container {
 }
 
 article#schema_summary {
-	background-color: #547980;
+	background-color: #789048;
 }
 
 	article#schema_summary div {
-		border: none;
-		padding: 0;
+		min-width: 45%;
+		margin-bottom: 1em;
 		background-color: transparent;
 	}
+	
+		article#schema_summary div *:first-child { margin-top: 0; }
 
 	article#schema_summary table {
 		margin-bottom: 0;
 	}
 	
 		article#schema_summary table thead th {	
-			text-shadow: 1px 1px 1px #547980;
-			background-color: rgba(69, 173, 168, 0.6);
-			color: #C0D860;
+			text-shadow: 1px 1px 1px #789048;
+			background-color: rgba(192, 216, 96, 0.6);
+			color: #F0F0D8;
 		}
 	
 		article#schema_summary table tbody tr:hover td,
 		article#schema_summary table tbody tr.even:hover td {
-			background-color: #C0D860;
+			background-color: #F0F0D8;
 		}
 		
 		article#schema_summary table tbody tr.even td {
-			background-color: rgba(229, 252, 194, 0.2);
+			background-color: rgba(240, 240, 216, 0.2);
 		}
 
 article#submit,
@@ -172,15 +179,15 @@ header {
 }
 
 footer {
-	background-color: #789048;
-	color: #C0D860;
+	background-color: #F0F0D8;
+	color: #604848;
 }
 
 	footer a,
 	footer a:link,
 	footer a:active,
 	footer a:visited {
-		color: #F0F0D8;
+		color: #789048;
 		text-decoration: underline;
 	}
 	
@@ -372,7 +379,7 @@ section#error {
 }
 
 section#notice {
-	color: #C0D860;
+	color: #789048;
 }
 
 table {
