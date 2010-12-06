@@ -75,7 +75,7 @@ class ColumnarDistribution < ModelBase
     
     # The rest of the query, skipping 'FROM' and the user-given table name
     num_words = words.length
-    query_remainder = words[from_index+1...num_words]
+    query_remainder = words[from_index+2...num_words]
 
     # Get index of 'GROUP' keyword as well as the 'GROUP BY'/'ORDER BY' string
     # the user gave
@@ -289,24 +289,32 @@ class ColumnarDistribution < ModelBase
     
     def self.get_where_block(tables, query_remainder, group_index,
       group_order_by)
-      table_names_keys = tables.collect do |table|
-        sprintf("%s.%s", table.table_name, KeyFieldName)
+      if !tables.nil? && tables.length > 1
+        table_names_keys = tables.collect do |table|
+          sprintf("%s.%s", table.table_name, KeyFieldName)
+        end
+        
+        # If we have tables a, b, c, we end up with table_pairs = [[a, b], [b, c]]
+        # for joining purposes
+        tables_offset = table_names_keys - [table_names_keys.first]
+        table_pairs = (table_names_keys - [table_names_keys.last]).zip(tables_offset)
+        
+        # Get a string like a.id=b.id AND b.id=c.id
+        table_join = table_pairs.collect do |table_pair|
+          table_pair.join('=')
+        end.join(" AND\n      ")
+      else
+        table_join = ''
       end
-      
-      # If we have tables a, b, c, we end up with table_pairs = [[a, b], [b, c]]
-      # for joining purposes
-      tables_offset = table_names_keys - [table_names_keys.first]
-      table_pairs = (table_names_keys - [table_names_keys.last]).zip(tables_offset)
-      
-      # Get a string like a.id=b.id AND b.id=c.id
-      table_join = table_pairs.collect do |table_pair|
-        table_pair.join('=')
-      end.join(" AND\n      ")
       
       # User didn't give any WHERE, GROUP BY, or ORDER BY clauses, so we can
       # just return our table-joining WHERE clause
       if query_remainder.nil? || query_remainder.empty?
-        return 'WHERE ' + table_join
+        if table_join.nil? || table_join.blank?
+          return ''
+        else
+          return 'WHERE ' + table_join
+        end
       end
       
       query_length = query_remainder.length;
