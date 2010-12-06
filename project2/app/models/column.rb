@@ -50,6 +50,13 @@ class Column
     @function = nil
   end
   
+  def ==(other)
+    return false unless other.respond_to?(:name)
+    return false unless other.respond_to?(:type)
+    return false unless other.respond_to?(:function)
+    @name == other.name && @type == other.type && @function == other.function
+  end
+  
   # Returns true if this column is a numeric type.
   def numeric?
     !(@type =~ NumericRegex).nil? || !(@type =~ IntRegex).nil?

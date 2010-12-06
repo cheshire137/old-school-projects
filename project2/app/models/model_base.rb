@@ -118,13 +118,10 @@ class ModelBase
       return [] if names.nil? || names.empty?
       if names.length == 1
         name = names.first
-        if name.include? ','
-          # In case columns were listed in query as only comma-separated, with no
-          # spaces
-          names.split!(',')
-        elsif name.eql? '*'
-          return @columns
-        end
+        # In case columns were listed in query as only comma-separated, with
+        # no spaces:
+        names.split!(',') if name.include? ','
+        return @columns if name.eql? '*'
       end
       # Lowercase all the given column names, remove trailing commas
       names.map! { |col_name| col_name.downcase.chomp(',') }

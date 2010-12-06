@@ -84,9 +84,13 @@ class ColumnarDistribution < ModelBase
     
     # Get Columns from the Columns list in this table, based on the user-given
     # column names in the query (both SELECT and WHERE clauses)
-    last_where_index = group_index || num_words
     raw_selected_cols = words[1...from_index]
-    raw_where_cols = words[from_index+1...last_where_index]
+    last_where_index = group_index || query_remainder.length
+    raw_where_cols = query_remainder[0...last_where_index].collect do |word|
+      # Turn "person='blah'" into two words, "person" and "'blah'", so we can
+      # look up the "person" column
+      word.split('=')
+    end.flatten
     selected_cols = get_columns_by_name(raw_selected_cols)
     where_cols = get_columns_by_name(raw_where_cols)
     
@@ -102,9 +106,7 @@ class ColumnarDistribution < ModelBase
     # Everything checks out, so construct a query that uses the vertically
     # partitioned tables to get the user-requested data
     query = sprintf(
-      "SELECT %s
-FROM %s
-%s",
+      "SELECT %s\nFROM %s\n%s",
       get_columns_block(selected_cols),
       tables_used.map(&:table_name).join(', '),
       where_block
@@ -242,6 +244,8 @@ FROM %s
       if selected_cols.nil? || selected_cols.empty?
         raise "Invalid query, no columns were SELECTed"
       end
+      # Make sure we don't have any duplicate columns
+      selected_cols.uniq!
       selected_cols.collect do |column|
         # Find the first decomposed table whose name matches the pattern
         # id_columnName, and that will be the relevant table for the current
@@ -312,21 +316,37 @@ FROM %s
       sprintf("WHERE %s\n%s", where_clause, group_order_by)
     end
     
+    # Returns the index in the given array of 
     def self.get_group_info(query_remainder)
       return [nil, ''] if query_remainder.nil? || query_remainder.empty?
       lowercase_query = query_remainder.map(&:downcase)
       query_length = query_remainder.length
-      group_index = lowercase_query.index { |word| 'group' == word }
-      if group_index.nil?
-        group_order_by = ''
+      
+      # Look for the 'GROUP BY' phrase first, since if both it and 'ORDER BY'
+      # exists, 'GROUP BY' will be first
+      group_order_index = lowercase_query.index { |word| 'group' == word }
+      if group_order_index.nil?
+        # Now look for 'ORDER BY' phrase
+        group_order_index = lowercase_query.index { |word| 'order' == word }
+        unless group_order_index.nil?
+          by_index = group_order_index + 1
+          if query_length <= by_index || lowercase_query[by_index] != 'by'
+            raise "Invalid query, found ORDER key word but not ORDER BY"
+          end
+        end
       else
-        by_index = group_index + 1
+        by_index = group_order_index + 1
         if query_length <= by_index || lowercase_query[by_index] != 'by'
           raise "Invalid query, found GROUP key word but not GROUP BY"
         end
-        group_order_by = query_remainder[group_index...query_length].join(' ')
       end
-      [group_index, group_order_by]
+      if group_order_index.nil?
+        group_order_by = ''
+      else
+        group_order_by =
+          query_remainder[group_order_index...query_length].join(' ')
+      end
+      [group_order_index, group_order_by]
     end
     
     def self.get_user_where_clause(lowercase_query, query_remainder,
