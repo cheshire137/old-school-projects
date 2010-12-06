@@ -1,6 +1,4 @@
-# Provides logic for processing user input from the web form.  Interacts with
-# the Client and UserLevel models to create, populate, and drop tables in the
-# database as necessary.
+# Provides logic for processing user input from the web form.
 class FormController < ApplicationController
   # This handles back-end processing for data given in a web form.  Will
   # redirect the user to the index page if it is accessed via any request type

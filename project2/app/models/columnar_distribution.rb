@@ -228,6 +228,9 @@ class ColumnarDistribution < ModelBase
           def drop_table
             ModelBase.drop_table(@table_name)
           end
+          def table_exists?
+            ModelBase.table_exists?(@table_name)
+          end
         end
         
         # Create an instance of the new class, giving it its table schema and
@@ -262,6 +265,8 @@ class ColumnarDistribution < ModelBase
       end
     end
     
+    # Returns schemas for all the vertically decomposed tables necessary, based
+    # on the given columns and the data in each column.
     def self.get_table_schemas(columns, column_data)
       column_definitions = column_data.collect do |column_values|
         key_value = 1
@@ -281,12 +286,17 @@ class ColumnarDistribution < ModelBase
       end
     end
     
+    # Given an array of lines from a table schema, this will return an array of
+    # arrays of column data by pivoting those lines.
     def self.pivot_data(data)
       return [] if data.nil?
       column_values = data.collect { |line| line.split(';') }
       Matrix.rows(column_values).transpose.to_a
     end
     
+    # This returns a string to be appended to a query.  It includes any
+    # necessary WHERE conditions for table joining, the user-given WHERE clause,
+    # and any user-given GROUP BY or ORDER BY clauses.
     def self.get_where_block(tables, query_remainder, group_index,
       group_order_by)
       if !tables.nil? && tables.length > 1
@@ -324,7 +334,9 @@ class ColumnarDistribution < ModelBase
       sprintf("WHERE %s\n%s", where_clause, group_order_by)
     end
     
-    # Returns the index in the given array of 
+    # Returns the index of the 'GROUP' key word for the given array of words
+    # from the query, as well as the 'GROUP BY' and/or 'ORDER BY' clauses, as
+    # taken from the given array.
     def self.get_group_info(query_remainder)
       return [nil, ''] if query_remainder.nil? || query_remainder.empty?
       lowercase_query = query_remainder.map(&:downcase)
@@ -357,6 +369,8 @@ class ColumnarDistribution < ModelBase
       [group_order_index, group_order_by]
     end
     
+    # Returns the user-given portion of the WHERE clause appended to the
+    # necessary table-join part of the WHERE clause
     def self.get_user_where_clause(lowercase_query, query_remainder,
       query_length, table_join, group_index)
       where_index = lowercase_query.index { |word| 'where' == word }
@@ -370,7 +384,8 @@ class ColumnarDistribution < ModelBase
       else
         last_where_index = group_index
       end
-      user_where = query_remainder[first_condition_index...last_where_index].join(' ')
+      user_where =
+        query_remainder[first_condition_index...last_where_index].join(' ')
       sprintf("%s AND
       (%s)", table_join, user_where)
     end
