@@ -1,0 +1,39 @@
+<% upc = $cgi.params['upc'].first
+error = false
+
+unless Toy.exists?( upc )
+  redirect( 'toy/list.rhtml', true, "Invalid UPC '#{upc}' given" )
+  error = true
+end
+
+unless error
+  toy = Toy.find( upc )
+
+  if !$session[:form] || $session[:form] && $session[:form][:upc] && $session[:form][:upc] != toy.upc
+    $session[:form] = {
+      :name => toy.name,
+      :upc => toy.upc,
+      :price => toy.price,
+      :quantity => toy.quantity,
+      :manufacturer => toy.manufacturer
+    }
+  end %>
+<p><a href="<%= BaseURI %>/toy/list.rhtml">List toys &raquo;</a></p>
+
+<form action="<%= BaseURI %>/controller.cgi" method="post">
+<input type="hidden" name="action" value="update" />
+<input type="hidden" name="table" value="toy" />
+  <fieldset>
+    <legend>Edit Toy</legend>
+    <ol>
+    <% Toy::Fields.each do |field| %>
+      <li>
+        <label for="<%= field %>"><%= field.to_s.capitalize.gsub( /_/, ' ' ) %>:</label>
+        <input type="text" size="25" id="<%= field %>" name="<%= field %>" value="<%= get_value( field ) %>" />
+      </li>
+    <% end %>
+      <li><input type="submit" value="Update &raquo;" /></li>
+    </ol>
+  </fieldset>
+</form>
+<% end %>

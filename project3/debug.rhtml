@@ -1,0 +1,13 @@
+<% curr_page = get_curr_page
+if DebugMode %>
+  <h2 class="space_above">
+    <a href="#" onclick="return toggle_display('debug', this);">
+      <img src="<%= BaseURI %>/assets/plus.gif" alt="+" />
+      Debug 
+    </a>
+  </h2>
+
+  <div id="debug" class="hide">
+    <%= $session.debug %>
+  </div>
+<% end %>

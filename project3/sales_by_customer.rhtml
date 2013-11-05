@@ -1,0 +1,34 @@
+<h1>Sales by Customer</h1>
+<% Person.find_all do |person| %>
+  <h2><%= person.first_name %> <%= person.last_name %></h2>
+
+  <p><%= person.street_address %><br />
+  <%= person.city %>, <%= person.state %> <%= person.zip %><br />
+  <%= person.phone %><br />
+  <a href="mailto:<%= person.email %>"><%= person.email %></a></p>
+
+  <ol class="padded">
+    <% total_orders = 0
+    OrderItem.find_all_by_login_name( person.login_name ) do |row, fields|
+      next if row.nil? %>
+      <li>
+        <% fields.each do |field|
+          next if row.send( field ).nil? || row.send( field ).to_s.blank? %>
+          <strong><%= field.to_s.capitalize.gsub( /_/, ' ' ) %>:</strong>
+          <% if field == 'price' %>
+            $<%= sprintf( "%0.2f", row.price ) %>
+          <% else %>
+            <%= row.send( field ) %>
+          <% end %>
+          <br />
+        <% end %>
+      </li>
+      <% total_orders += 1
+    end %>
+  </ol>
+
+  <% if total_orders == 0 %>
+    <p><%= person.first_name %> has placed no orders.</p>
+  <% end %>
+  <hr />
+<% end %>

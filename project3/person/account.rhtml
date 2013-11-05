@@ -1,0 +1,59 @@
+<h1>My Account</h1>
+<p><em>Note:</em>  if you are not <%= $session[:user].first_name %> <%= $session[:user].last_name %>, please <a href="<%= BaseURI %>/logout.cgi">log out</a>.</p>
+
+<h2>Order History</h2>
+<% order = Order.get_completed( $session[:user].login_name )
+if order.nil? %>
+  <p>You have never placed an order with us.</p>
+<% else %>
+  <ol>
+    <% Order.get_completed( $session[:user].login_name ) do |row| %>
+      <li>
+        <a href="<%= BaseURI %>/person/order_info.rhtml?id=<%= row.id %>">
+          Order #<%= row.id %>, began <%= row.time %>
+        </a>
+      </li>
+    <% end %>
+  </ol>
+<% end %>
+
+<form action="<%= BaseURI %>/update_my_info.cgi" method="post">
+  <input type="hidden" name="action" value="update" />
+  <input type="hidden" name="table" value="person" />
+  <fieldset>
+    <legend>Update Information</legend>
+    <ol>
+      <li><label>Login name:</label> <%= $session[:user].login_name %> (cannot be changed)</li>
+      <% Person::Fields.each do |field|
+        next if [:person_type, :password, :login_name].include?( field ) %>
+        <li>
+          <label for="<%= field %>"><%= field.to_s.gsub( /_/, ' ' ).capitalize %>:</label>
+          <input type="text" size="25" id="<%= field %>" name="<%= field %>" value="<%= $session[:user].send( field ) %>" />
+        </li>
+      <% end %>
+      <li><input type="submit" value="Update &raquo;" /></li>
+    </ol>
+  </fieldset>
+</form>
+
+<form action="<%= BaseURI %>/change_password.cgi" method="post">
+  <input type="hidden" name="login_name" value="<%= $session[:user].login_name %>" />
+  <fieldset>
+    <legend>Change Password</legend>
+    <ol>
+      <li>
+        <label for="password">Current password:</label>
+        <input type="password" size="25" id="password" name="old_password" />
+      </li>
+      <li>
+        <label for="new_password">Password:</label>
+        <input type="password" size="25" id="new_password" name="new_password" />
+      </li>
+      <li>
+        <label for="new_password_again">Re-enter password:</label>
+        <input type="password" size="25" id="new_password_again" name="new_password_again" />
+      </li>
+      <li><input type="submit" value="Change &raquo;" /></li>
+    </ol>
+  </fieldset>
+</form>

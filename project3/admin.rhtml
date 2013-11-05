@@ -1,0 +1,49 @@
+<h1>Administration</h1>
+<h2>Sales</h2>
+<ul>
+  <li><a href="<%= BaseURI %>/sales_by_customer.rhtml">By customer</a></li>
+  <li><a href="<%= BaseURI %>/sales_by_toy.rhtml">By toy</a></li>
+  <li><a href="<%= BaseURI %>/sales_by_book.rhtml">By book</a></li>
+</ul>
+
+<h2 class="space_above">Registered Users</h2>
+<table>
+  <thead>
+    <tr>
+      <% Person::Fields.each do |field|
+        next if [:street_address, :zip, :city, :state, :password, :email].include?( field ) %>
+        <th><%= field.to_s.capitalize.gsub( /_/, ' ' ) %></th>
+      <% end %>
+      <th>Address</th>
+      <th>Options</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% Person.find_all do |row| %>
+      <tr>
+        <% Person::Fields.each do |field|
+          next if [:street_address, :zip, :city, :state, :password, :email].include?( field ) %>
+          <td>
+            <% if field == :login_name %>
+              <a href="mailto:<%= row.email %>"><%= row.login_name %></a>
+            <% else %>
+              <%= row.send( field ) %>
+            <% end %>
+          </td>
+        <% end %>
+        <td>
+          <%= row.street_address %><br />
+          <%= row.city %>, <%= row.state %> <%= row.zip %>
+        </td>
+        <td>
+          <% if row.person_type == 'customer' && $session[:user].person_type == 'manager' || $session[:user].person_type == 'manager' %>
+            <a href="<%= BaseURI %>/person/edit.rhtml?login_name=<%= row.login_name %>">Edit</a> |
+            <a href="<%= BaseURI %>/person/delete.rhtml?login_name=<%= row.login_name %>">Delete</a>
+          <% else %>
+            You cannot edit/delete this user.
+          <% end %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>

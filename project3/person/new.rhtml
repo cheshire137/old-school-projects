@@ -1,0 +1,29 @@
+<p>In order to purchase books or toys from Nile, you must register
+an account below.</p>
+
+<form action="<%= BaseURI %>/controller.cgi" method="post">
+<input type="hidden" name="action" value="create" />
+<input type="hidden" name="table" value="person" />
+<input type="hidden" name="person_type" value="customer" />
+  <fieldset>
+    <legend>Create Account</legend>
+    <ol>
+    <% Person::Fields.each do |field| %>
+      <% next if [:person_type, :password].include?( field ) %>
+      <li>
+        <label for="<%= field %>"><%= field.to_s.gsub( /_/, ' ' ).capitalize %>:</label>
+        <input type="text" size="25" id="<%= field %>" name="<%= field %>" value="<%= get_value( field ) %>" />
+      </li>
+    <% end %>
+      <li>
+        <label for="password">Password:</label>
+        <input type="password" size="25" id="password" name="password" />
+      </li>
+      <li>
+        <label for="password_again">Re-enter password:</label>
+        <input type="password" size="25" id="password_again" name="password_again" />
+      </li>
+      <li><input type="submit" value="Register &raquo;" /></li>
+    </ol>
+  </fieldset>
+</form>

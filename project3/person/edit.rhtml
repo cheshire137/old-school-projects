@@ -1,0 +1,52 @@
+<% login_name = $cgi.params['login_name'].first
+error = false
+
+if Person.exists?( login_name )
+  person = Person.find( login_name ) 
+
+  if ['manager', 'staff'].include?( person.person_type ) && $session[:user].person_type != 'manager' || $session[:user].person_type == 'customer'
+    redirect( 'index.rhtml', true, 'You do not have permission to edit that user' )
+    error = true
+  end
+else
+  redirect( 'admin.rhtml', true, "Invalid login name '#{login_name}' given" )
+  error = true
+end
+
+unless error
+  if !$session[:form] || $session[:form] && $session[:form][:login_name] && $session[:form][:login_name] != person.login_name
+    $session[:form] = {
+      :first_name => person.first_name,
+      :last_name => person.last_name,
+      :street_address => person.street_address,
+      :city => person.city,
+      :state => person.state,
+      :zip => person.zip,
+      :email => person.email,
+      :phone => person.phone,
+      :person_type => person.person_type,
+      :login_name => person.login_name
+    }
+  end %>
+  <p><a href="<%= BaseURI %>/admin.rhtml">List people &raquo;</a></p>
+
+  <form action="<%= BaseURI %>/controller.cgi" method="post">
+  <input type="hidden" name="action" value="update" />
+  <input type="hidden" name="table" value="person" />
+  <input type="hidden" name="login_name" value="<%= $session[:form][:login_name] %>" />
+    <fieldset>
+      <legend>Edit <%= $session[:form][:person_type].to_s.capitalize %></legend>
+      <ol>
+        <li><label>Login name:</label> <%= $session[:form][:login_name] %> (cannot be changed)</li>
+        <% Person::Fields.each do |field|
+          next if [:login_name, :password].include?( field ) %>
+          <li>
+            <label for="<%= field %>"><%= field.to_s.capitalize.gsub( /_/, ' ' ) %>:</label>
+            <input type="text" size="25" id="<%= field %>" name="<%= field %>" value="<%= get_value( field ) %>" />
+          </li>
+        <% end %>
+        <li><input type="submit" value="Update &raquo;" /></li>
+      </ol>
+    </fieldset>
+  </form>
+<% end %>

@@ -1,0 +1,18 @@
+<p><a href="list.rhtml">List books &raquo;</a></p>
+
+<form action="<%= BaseURI %>/controller.cgi" method="post">
+<input type="hidden" name="action" value="create" />
+<input type="hidden" name="table" value="book" />
+  <fieldset>
+    <legend>Add Book</legend>
+    <ol>
+    <% Book::Fields.each do |field| %>
+      <li>
+        <label for="<%= field %>"><%= field.to_s.capitalize %>:</label>
+        <input type="text" size="25" id="<%= field %>" name="<%= field %>" />
+      </li>
+    <% end %>
+      <li><input type="submit" value="Create &raquo;" /></li>
+    </ol>
+  </fieldset>
+</form>

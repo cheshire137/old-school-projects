@@ -1,0 +1,16 @@
+  </div>
+  <div id="footer">
+    <ul class="inline">
+      <li>&copy; 2007 Tom McKnight and Sarah Vessels</a></li>
+      <% unless curr_page == 'description.rhtml' %>
+        <li><a href="<%= BaseURI %>/description.rhtml">Project Description</a></li>
+      <% end %>
+
+      <% unless curr_page == 'credits.rhtml' %>
+        <li><a href="<%= BaseURI %>/credits.rhtml">Credits</a></li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+</body>
+</html>

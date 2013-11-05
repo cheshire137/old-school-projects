@@ -1,0 +1,44 @@
+<h1>Sales by Book</h1>
+<% Book.find_all do |book| %>
+  <h2>
+    <%= book.title %> by <%= book.author %>
+    | <a href="<%= BaseURI %>/search.cgi?product_type=book&amp;query=<%= book.author %>&amp;field=author">All books by this author &raquo;</a>
+  </h2>
+
+  <p><strong>Publisher:</strong> <%= book.publisher %>
+  | <a href="<%= BaseURI %>/search.cgi?product_type=book&amp;query=<%= book.publisher %>&amp;field=publisher">All books by this publisher &raquo;</a><br />
+  <strong>ISBN:</strong> <%= book.isbn %></p>
+
+  <ol class="padded">
+    <% total_ordered = 0
+      OrderItem.find_all_by_isbn( book.isbn ) do |row, fields|
+      next if row.nil? %>
+      <li>
+        <% fields.each do |field|
+          next if ['login_name', 'street_address', 'city', 'zip', 'state', 'first_name', 'last_name', 'person_type', 'phone', 'email'].include?( field ) %>
+          <strong><%= field.to_s.capitalize.gsub( /_/, ' ' ) %>:</strong>
+          <% if field == 'price' %>
+            $<%= sprintf( "%0.2f", row.price ) %>
+          <% else %>
+            <%= row.send( field ) %>
+          <% end %>
+          <br />
+        <% end %>
+        <strong>Customer info:</strong>
+        <a href="mailto:<%= row.email %>">
+          <%= row.first_name %> <%= row.last_name %>
+        </a><br />
+        <%= row.street_address %><br />
+        <%= row.city %>, <%= row.state %> <%= row.zip %><br />
+        <%= row.phone %><br />
+        <%= row.person_type %>, <%= row.login_name %><br />
+      </li>
+      <% total_ordered += 1 
+    end %>
+  </ol>
+
+  <% if total_ordered == 0 %>
+    <p>There have been no orders for this book.</p>
+  <% end %>
+  <hr />
+<% end %>

@@ -1,0 +1,41 @@
+<h1>Sales by Toy</h1>
+<% Toy.find_all do |toy| %>
+  <h2><%= toy.name %></h2>
+
+  <p><strong>Manufacturer:</strong> <%= toy.manufacturer %>
+  | <a href="<%= BaseURI %>/search.cgi?product_type=toy&amp;query=<%= toy.manufacturer %>&amp;field=manufacturer">All toys by this manufacturer &raquo;</a><br />
+  <strong>UPC:</strong> <%= toy.upc %></p>
+
+  <ol class="padded">
+    <% total_ordered = 0
+      OrderItem.find_all_by_upc( toy.upc ) do |row, fields|
+      next if row.nil? %>
+      <li>
+        <% fields.each do |field|
+          next if ['login_name', 'street_address', 'city', 'zip', 'state', 'first_name', 'last_name', 'person_type', 'phone', 'email'].include?( field ) %>
+          <strong><%= field.to_s.capitalize.gsub( /_/, ' ' ) %>:</strong>
+          <% if field == 'price' %>
+            $<%= sprintf( "%0.2f", row.price ) %>
+          <% else %>
+            <%= row.send( field ) %>
+          <% end %>
+          <br />
+        <% end %>
+        <strong>Customer info:</strong>
+        <a href="mailto:<%= row.email %>">
+          <%= row.first_name %> <%= row.last_name %>
+        </a><br />
+        <%= row.street_address %><br />
+        <%= row.city %>, <%= row.state %> <%= row.zip %><br />
+        <%= row.phone %><br />
+        <%= row.person_type %>, <%= row.login_name %><br />
+      </li>
+      <% total_ordered += 1 
+    end %>
+  </ol>
+
+  <% if total_ordered == 0 %>
+    <p>There have been no orders for this toy.</p>
+  <% end %>
+  <hr />
+<% end %>

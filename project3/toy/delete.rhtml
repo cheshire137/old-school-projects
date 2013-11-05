@@ -1,0 +1,31 @@
+<% upc = $cgi.params['upc'].first
+error = false
+
+unless Toy.exists?( upc )
+  redirect( 'toy/list.rhtml', true, "Invalid UPC '#{upc}' given" )
+  error = true
+end
+
+unless error
+  toy = Toy.find( upc) %>
+  <h1>Confirm Deletion</h1>
+  <p>Are you sure you want to delete this toy from the database?
+  <em>This is final.</em></p>
+
+  <dl>
+    <% Toy::Fields.each do |field| %>
+      <dt><%= field.to_s.capitalize.gsub( /_/, ' ' ) %></dt>
+      <dd><%= toy.send( field ) %></dd>
+    <% end %>
+  </dl>
+
+  <form action="<%= BaseURI %>/controller.cgi" method="post">
+    <input type="hidden" name="table" value="toy" />
+    <input type="hidden" name="action" value="delete" />
+    <input type="hidden" name="upc" value="<%= toy.upc %>" />
+    <p>
+      <a href="<%= BaseURI %>/toy/list.rhtml">Cancel</a> |
+      <input type="submit" value="Delete it &raquo;" />
+    </p>
+  </form>
+<% end %>

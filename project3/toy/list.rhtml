@@ -1,0 +1,71 @@
+<h1>Toys</h1>
+<% if $session[:user] && ['staff', 'manager'].include?( $session[:user].person_type ) %>
+  <p><a href="<%= BaseURI %>/toy/new.rhtml">Add a toy &raquo;</a></p>
+<% end %>
+
+<% num_columns = Toy::Fields.size
+num_columns += 1 if $session[:user] %>
+
+<table>
+  <caption>Browse Toys</caption>
+  <thead>
+    <tr>
+      <% Toy::Fields.each do |field|
+        next if field == :upc %>
+        <th><%= field.to_s.capitalize %></th>
+      <% end %>
+      <% if $session[:user] %>
+        <th>Options</th>
+      <% end %>
+    </tr>
+  </thead>
+  <tbody>
+    <% count = 0 %>
+    <% Toy.find_all do |row|
+      next if row.quantity < 1
+      %>
+      <% if count % 2 == 0 %>
+        <tr>
+      <% else %>
+        <tr class="alt">
+      <% end %>
+        <% Toy::Fields.each do |field|
+          next if field == :upc %>
+          <td>
+            <% if field == :price %>
+              $<%= sprintf( "%0.2f", row.send( field ) ) %>
+            <% else %>
+              <%= row.send( field ) %>
+            <% end %>
+          </td>
+        <% end %>
+        <% if $session[:user] %>
+          <td>
+            <form action="<%= BaseURI %>/purchase.cgi" method="post">
+              <input type="hidden" name="product_type" value="toy" />
+              <input type="hidden" name="product_id" value="<%= row.upc %>" />
+              <input type="hidden" name="login_name" value="<%= $session[:user].login_name %>" />
+              <input type="hidden" name="return" value="toy/list.rhtml" />
+              <input type="submit" value="Add to Cart &raquo;" />
+            </form>
+
+            <% if ['staff', 'manager'].include?( $session[:user].person_type ) %>
+              <a href="<%= BaseURI %>/toy/edit.rhtml?upc=<%= row.upc %>">Edit</a> |
+              <a href="<%= BaseURI %>/toy/delete.rhtml?upc=<%= row.upc %>">Delete</a>
+            <% end %>
+          </td>
+        <% end %>
+      </tr>
+      <% count += 1 %>
+    <% end %>
+  </tbody>
+  <tfoot>
+    <tr>
+      <td colspan="<%= num_columns %>">
+        <%= count %> results
+      </td>
+    </tr>
+  </tfoot>
+</table>
+
+<div class="constrain_box"><%= Toy.search_form %></div>

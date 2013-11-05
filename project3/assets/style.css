@@ -1,0 +1,255 @@
+a img, img { border: none; }
+
+a { text-decoration: none; }
+a:link { color: #2270e2; }
+a:visited, a:active { color: #4c9bed; }
+a:hover {
+  color: #e28e22;
+  text-decoration: underline;
+}
+
+body {
+  background: white url('grad.jpg') repeat-x left top;
+  color: black;
+  text-align: center;
+  font: small/1.3 "Lucida Grande", sans-serif;
+}
+
+div#book_box { width: 48%; }
+
+div.constrain_box { width: 48%; }
+
+div#container {
+  width: 53em;
+  text-align: left;
+  position: relative;
+  margin: 20px auto; padding: 1em;
+  overflow: hidden;
+  background-color: white;
+  border: 1px solid black;
+}
+
+div#footer {
+  width: 100%;
+  position: relative;
+  text-align: center;
+  font-size: 90%;
+  line-height: 1.2;
+  margin-top: 10px;
+}
+
+  div#footer ul { margin: 0; }
+
+div#header {
+  position: relative;
+  width: 100%;
+  background: url('logo.jpg') no-repeat left center;
+  height: 96px;
+}
+
+  div#header a {
+    display: block;
+    font-weight: bold;
+    padding: 0.75em 10px;
+    color: #2270e2;
+    background-color: #d7e9fb;
+  }
+
+  div#header a:hover {
+    text-decoration: none;
+    background-color: #2270e2;
+    color: white;
+  }
+  
+  div#header ul {
+    float: right;
+    line-height: 1.2;
+    padding: 0; margin: 0;
+  }
+
+    div#header ul li {
+      float: left;
+      margin: 0 0 0 10px;
+    }
+
+div#login_box { width: 45%; }
+
+div#toy_box {
+  float: right;
+  width: 48%;
+  margin-left: 3%;
+}
+
+  div#toy_box fieldset { margin: 0; }
+
+dl {
+  margin: 1em 0; padding: 5px;
+  border: 1px solid black;
+}
+
+  dl dd { margin: 0 0 7px 25px; }
+
+  dl dt {
+    font-weight: bold;
+    margin-right: 15px;
+  }
+
+form fieldset {
+  margin: 10px 0 5px 0; padding: 5px 10px;
+  border: 1px solid black;
+  background-color: #d7e9fb;
+}
+
+  form fieldset *:first-child { margin-top: 0; }
+  form fieldset *:last-child { margin-bottom: 0; }
+
+  form fieldset fieldset { background-color: #c1defa; }
+  
+  form fieldset ol { margin-top: 0; margin-bottom: 0; }
+
+  form fieldset ol.inline { margin: 0; padding: 0; }
+
+    form fieldset ol.inline li {
+      display: inline;
+      margin: 0;
+    }
+  
+  form fieldset p { margin: 5px 0; }
+
+form input, form textarea, form select {
+  font: small/1.3 "Lucida Grande", sans-serif;
+  background-color: white;
+  color: black;
+  border-width: 1px;
+  border-color: #c0c0c0;
+}
+
+form label {
+  display: inline-block;
+  width: 8.7em;
+  vertical-align: middle;
+}
+
+form label.full { width: auto; }
+
+form label:hover {
+  cursor: pointer;
+  color: #494949;
+}
+
+  form legend { margin: 0; }
+
+form ol { margin: 10px 0; padding: 0; }
+
+  form ol li {
+    margin: 0 0 7px 0;
+    list-style: none;
+  }
+          
+    form ol li ol li { list-style: none; }
+
+form.inline { display: inline; }
+
+h1, h2, h3, legend, caption {
+  margin: 5px 0;
+  line-height: 1.2;
+  font-weight: normal;
+}
+
+h1 { font-size: 180%; }
+h2, legend, caption { font-size: 130%; }
+h3 { font-size: 110%; }
+
+hr {
+  border: none;
+  border-bottom: 1px solid black;
+  padding: 0; margin: 1em 0;
+}
+
+.padded li { margin-bottom: 7px; }
+
+p.error {
+  font-size: 110%;
+  color: #7c1d00;
+  padding: 3px 5px;
+  border: 1px solid #cc3000;
+  background-color: #ecaf9c;
+}
+
+p.notice {
+  font-size: 110%;
+  padding: 3px 5px;
+  background-color: #cfff9c;
+  border: 1px solid #98d656;
+  color: #40700c;
+}
+
+pre.debug_dump {
+  overflow: auto;
+  width: 100%;
+}
+
+.space_above { margin-top: 25px; }
+.space_below { margin-bottom: 25px; }
+
+table {
+  border-collapse: collapse;
+  margin: 1em 0;
+  width: 100%;
+  border: 1px solid black;
+}
+
+  table caption {
+    font-weight: normal;
+    text-align: left;
+    line-height: 1.2;
+    margin: 0; padding: 0;
+  }
+
+  table td {
+    vertical-align: top;
+    padding: 3px 5px;
+  }
+
+  table tfoot {
+    border-top: 1px solid black;
+    font-style: italic;
+    font-weight: normal;
+    text-align: left;
+    background-color: #c1defa;
+  }
+
+  table th {
+    font-weight: bold;
+    text-align: center;
+    background-color: #c1defa;
+    padding: 3px 5px;
+    vertical-align: middle;
+  }
+
+  table thead { border-bottom: 1px solid black; }
+
+  table tr.alt td { background-color: #d7e9fb; }
+
+table#order_total {
+  font-size: 120%;
+  background-color: #c1defa;
+  padding: 5px;
+  width: auto;
+}
+
+  table#order_total th {
+    text-align: left;
+    font-weight: bold;
+  }
+
+  table#order_total td { vertical-align: middle; }
+
+ul { margin: 1em 0; padding: 0 0 0 25px; }
+
+ul.inline { padding: 0; }
+
+  ul.inline li {
+    display: inline;
+    margin-right: 15px;
+  }

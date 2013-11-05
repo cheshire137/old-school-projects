@@ -1,0 +1,134 @@
+<h1>Shopping Cart</h1>
+<% order = Order.get_in_progress( $session[:user].login_name )
+if order.nil? %>
+  <p>You currently have no items in your shopping cart.</p>
+<% else %>
+  <p><em>Hint:</em>  if you want to remove an item from your cart,
+  set its quantity to '0'.</p>
+  <ol>
+    <%
+    order_total = 0
+    OrderItem.find_all_by_order( order.id ) do |row|
+      type = row.product_type
+      product = type.tablify.find( row.product_id ) %>
+      <li>
+        <form action="<%= BaseURI %>/edit_order.cgi" method="post">
+          <input type="hidden" name="product_type" value="<%= type %>" />
+          <input type="hidden" name="login_name" value="<%= $session[:user].login_name %>" />
+          <input type="hidden" name="order_id" value="<%= order.id %>" />
+          <input type="hidden" name="product_id" value="<%= row.product_id %>" />
+          <strong>Type:</strong> <%= type %><br />
+          <strong>
+            <label class="full" for="new_quantity">Quantity:</label>
+          </strong>
+          <select id="new_quantity" name="new_quantity">
+            <% 0.upto( product.quantity ) do |qty| %>
+              <option value="<%= qty %>"<%= ' selected="selected"' if qty == row.quantity %>>
+                <%= qty %>
+              </option>
+            <% end %>
+          </select>
+          <input type="submit" value="Change &raquo;" />
+          <br />
+          <strong>Price:</strong> $<%= sprintf( "%0.2f", row.price ) %> each<br />
+          <% if type == 'book' %>
+            <strong>&ldquo;<%= product.title %>&rdquo; by
+            <%= product.author %></strong><br />
+            <strong>ISBN:</strong> <%= product.isbn %><br />
+          <% else %>
+            <strong><%= product.name %> by <%= product.manufacturer %></strong>
+          <% end %>
+        </form>
+      </li>
+      <%
+      order_total += row.price * row.quantity
+    end %>
+  </ol>
+
+  <% subtotal = order_total
+  sales_tax = subtotal * SalesTax
+  total = subtotal + sales_tax + ShippingHandling %>
+  <table id="order_total" summary="Contains information about the order's total cost, including the subtotal of item costs and the shipping and handling fees.">
+    <tr>
+      <th>Subtotal:</th>
+      <td>$<%= sprintf( "%0.2f", subtotal ) %></td>
+    </tr>
+    <tr>
+      <th>Sales tax:</th>
+      <td>$<%= sprintf( "%0.2f", sales_tax ) %></td>
+    </tr>
+    <tr>
+      <th>Shipping and handling:</th>
+      <td>$<%= sprintf( "%0.2f", ShippingHandling ) %></td>
+    </tr>
+    <tr>
+      <th>Total:</th>
+      <td>$<%= sprintf( "%0.2f", total ) %></td>
+    </tr>
+  </table>
+
+  <% if !$session[:form] || $session[:form] && $session[:form][:login_name] && $session[:form][:login_name] != person.login_name
+    $session[:form] = {}
+    $session[:form][:first_name] = $session[:user].first_name
+    $session[:form][:last_name] = $session[:user].last_name
+    $session[:form][:street_address] = $session[:user].street_address
+    $session[:form][:city] = $session[:user].city
+    $session[:form][:state] = $session[:user].state
+    $session[:form][:zip] = $session[:user].zip
+  end %>
+
+  <form action="<%= BaseURI %>/check_out.cgi" method="post">
+    <input type="hidden" name="login_name" value="<%= $session[:user].login_name %>" />
+    <input type="hidden" name="order_id" value="<%= order.id %>" />
+    <fieldset>
+      <legend>Check Out</legend>
+      <p>The total cost of the order above, <strong>$<%= sprintf( "%0.2f", total ) %></strong>,
+      will be charged to the credit card you enter below:</p>
+      <ol>
+        <% CreditCard::Fields.each do |field| %>
+          <li>
+            <% next if [:login_name, :expiration_month, :expiration_year].include?( field ) %>
+            <label for="<%= field %>">
+              <%= field.to_s.gsub( /_/, ' ' ).capitalize %>:
+            </label>
+            <% if field == :company %>
+              <select name="company" id="company">
+                <% CreditCard::Companies.each do |company| %>
+                  <option value="<%= company %>"><%= company %></option>
+                <% end %>
+              </select>
+            <% else %>
+              <input type="text" size="25" id="<%= field %>" name="<%= field %>" value="<%= get_value( field ) %>" />
+            <% end %>
+          </li>
+        <% end %>
+        <li>
+          <fieldset>
+            <legend>Expiration</legend>
+            <ol>
+              <li>
+                <label for="expiration_month">Month:</label>
+                <select name="expiration_month" id="expiration_month">
+                  <% 1.upto( 12 ) do |month| %>
+                    <option value="<%= month %>"><%= month %></option>
+                  <% end %>
+                </select>
+              </li>
+              <li>
+                <label for="expiration_year">Year:</label>
+                <select name="expiration_year" id="expiration_year">
+                  <% curr_year = Time.now.year
+                  future_year = curr_year + 7 # arbitrary range
+                  curr_year.upto( future_year ) do |year| %>
+                    <option value="<%= year %>"><%= year %></option>
+                  <% end %>
+                </select>
+              </li>
+            </ol>
+          </fieldset>
+        </li>
+        <li><input type="submit" value="Submit Order &raquo;" /></li>
+      </ol>
+    </fieldset>
+  </form>
+<% end %>

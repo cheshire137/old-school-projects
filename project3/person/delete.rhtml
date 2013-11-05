@@ -1,0 +1,32 @@
+<% login_name = $cgi.params['login_name'].first
+error = false
+
+unless Person.exists?( login_name )
+  redirect( 'person/list.rhtml', true, "Invalid login name '#{login_name}' given" )
+  error = true
+end
+
+unless error
+  person = Person.find( login_name ) %>
+  <h1>Confirm Deletion</h1>
+  <p>Are you sure you want to delete this person from the database?
+  <em>This is final.</em></p>
+
+  <dl>
+    <% Person::Fields.each do |field|
+      next if field == :password %>
+      <dt><%= field.to_s.capitalize.gsub( /_/, ' ' ) %></dt>
+      <dd><%= person.send( field ) %></dd>
+    <% end %>
+  </dl>
+
+  <form action="<%= BaseURI %>/controller.cgi" method="post">
+    <input type="hidden" name="table" value="person" />
+    <input type="hidden" name="action" value="delete" />
+    <input type="hidden" name="login_name" value="<%= person.login_name %>" />
+    <p>
+      <a href="<%= BaseURI %>/admin.rhtml">Cancel</a> |
+      <input type="submit" value="Delete him/her &raquo;" />
+    </p>
+  </form>
+<% end %>

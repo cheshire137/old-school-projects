@@ -1,0 +1,47 @@
+<% curr_page = get_curr_page %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<title>Project 3 - Tom McKnight and Sarah Vessels</title>
+<link rel="stylesheet" type="text/css" href="<%= BaseURI %>/assets/style.css" media="screen" />
+<% ['prototype', 'controls', 'effects', 'dragdrop', 'general'].each do |file_name| %>
+  <script type="text/javascript" src="<%= BaseURI %>/assets/<%= file_name %>.js"></script>
+<% end %>
+</head>
+<body>
+<div id="container">
+  <div id="header">
+    <ul class="inline">
+      <li><a href="<%= BaseURI %>/book/list.rhtml">Books</a></li>
+      <li><a href="<%= BaseURI %>/toy/list.rhtml">Toys</a></li>
+      <% if $session[:user] %>
+        <% if Order.get_in_progress( $session[:user].login_name ) %>
+          <li><a href="<%= BaseURI %>/person/cart.rhtml">Cart</a></li>
+        <% end %>
+
+        <% if ['manager', 'staff'].include?( $session[:user].person_type ) %>
+          <li><a href="<%= BaseURI %>/admin.rhtml">Admin</a></li>
+        <% end %>
+
+        <li><a href="<%= BaseURI %>/person/account.rhtml">Account</a></li>
+        <li><a href="<%= BaseURI %>/logout.cgi">Log Out</a></li>
+      <% end %>
+      <li><a href="<%= BaseURI %>/index.rhtml">Home</a></li>
+    </ul>
+  </div>
+  <div id="main">
+<%
+if $cgi.params.has_key? 'error'
+  error = true
+else
+  error = false
+end
+
+message = $session[:message] || ''
+
+if error && !message.empty? %>
+<p class="error"><%= message %></p>
+<% elsif !message.empty? %>
+<p class="notice"><%= message %></p>
+<% end %>

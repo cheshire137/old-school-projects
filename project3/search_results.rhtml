@@ -1,0 +1,52 @@
+<%
+redirect( 'logged_in.rhtml', true, 'No search query given' ) unless $session[:search]
+count = 0
+table = $session[:search][:table]
+method = $session[:search][:method]
+query = $session[:search][:query]
+product_type = table.to_s.downcase
+%>
+<h1>Search Results for Query &ldquo;<%= query %>&rdquo; in <%= table.to_s %>s</h1>
+<ol class="padded">
+<% table.send( method, query ) do |row| %>
+  <li>
+    <% table::Fields.each do |field| %>
+      <% next if field == :upc %>
+      <strong><%= field.to_s.gsub( /_/, ' ' ).capitalize %>:</strong>
+      <% if field == :price %>
+        $<%= sprintf( "%0.2f", row.send( field ) ) %>
+      <% else %>
+        <%= row.send( field ) %>
+      <% end %>
+      <br />
+    <% end %>
+
+    <% if $session[:user] %>
+      <form method="post" action="<%= BaseURI %>/purchase.cgi">
+        <input type="hidden" name="login_name" value="<%= $session[:user].login_name %>" />
+        <input type="hidden" name="product_type" value="<%= product_type %>" />
+        <input type="hidden" name="product_id" value="<%= row.id %>" />
+        <input type="hidden" name="return" value="<%= product_type %>/list.rhtml" />
+        <% if ['staff', 'manager'].include?( $session[:user].person_type )
+          if product_type == 'book'
+            key = 'isbn'
+          else
+            key = 'upc'
+          end %>
+          <a href="<%= BaseURI %>/<%= product_type %>/edit.rhtml?<%= key %>=<%= row.id %>">Edit</a> |
+          <a href="<%= BaseURI %>/<%= product_type %>/delete.rhtml?<%= key %>=<%= row.id %>">Delete</a> |
+        <% end %>
+
+        <input type="submit" value="Purchase &raquo;" />
+      </form>
+    <% else %>
+      Want to buy this?  <a href="<%= BaseURI %>/index.rhtml">Log in</a> first!  Don't have an account?  <a href="<%= BaseURI %>/person/new.rhtml">Create one</a>!
+    <% end %>
+  </li>
+  <% count += 1 %>
+<% end %>
+</ol>
+<p><em><%= count %> search result<%= 's' if count == 0 || count > 1 %></em></p>
+
+<div id="toy_box"><%= Toy.search_form %></div>
+<div id="book_box"><%= Book.search_form %></div>

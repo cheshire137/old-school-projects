@@ -1,0 +1,71 @@
+<% id = $cgi.params['id'].first
+error = false
+
+if Order.exists?( id )
+  order = Order.find( id )
+
+  unless order.login_name == $session[:user].login_name
+    redirect( 'person/account.rhtml', true, 'You cannot access order information for users other than yourself' )
+    error = true
+  end
+else
+  redirect( 'person/account.rhtml', true, "Invalid order ID '#{id}' given" )
+  error = true
+end
+
+unless error %>
+  <h1>Order Information</h1>
+  <dl>
+    <% Order::Fields.each do |field|
+      next if [:login_name, :id].include?( field ) %>
+      <dt><%= field.to_s.capitalize.gsub( /_/, ' ' ) %></dt>
+      <dd><%= order.send( field ) %></dd>
+    <% end %>
+    <dt>Items Purchased</dt>
+    <dd>
+      <ol class="padded">
+        <% item_total = 0
+        OrderItem.find_all_by_order( id ) do |row| %>
+          <li>
+            <% OrderItem::Fields.each do |field|
+              next if [:order_id, :product_id].include?( field ) %>
+              <strong><%= field.to_s.capitalize.gsub( /_/, ' ' ) %></strong>
+              &mdash;
+
+              <% if field == :price %>
+                $<%= sprintf( "%0.2f", row.send( field ) ) %>
+              <% else %>
+                <%= row.send( field ) %>
+              <% end %>
+              <br />
+            <% end %>
+
+            <% product_table = row.product_type.tablify
+            product = product_table.find( row.product_id )
+            product_table::Fields.each do |product_field|
+              next if [:price, :quantity].include?( product_field ) %>
+              <strong><%= product_field.to_s.capitalize.gsub( /_/, ' ' ) %></strong>
+              &mdash;
+              <%= product.send( product_field ) %><br />
+            <% end
+            item_total += row.price * row.quantity %>
+          </li>
+        <% end %>
+      </ol>
+    </dd>
+    <dt>Cost</dt>
+    <dd>
+      <ul>
+        <% subtotal = item_total
+        sales_tax = subtotal * SalesTax
+        total = subtotal + sales_tax + ShippingHandling %>
+        <li><strong>Subtotal</strong> &mdash; $<%= sprintf( "%0.2f", subtotal ) %></li>
+        <li><strong>Sales tax</strong> &mdash; $<%= sprintf( "%0.2f", sales_tax ) %></li>
+        <li><strong>Shipping and handling</strong> &mdash; $<%= sprintf( "%0.2f", ShippingHandling ) %></li>
+        <li><strong>Total</strong> &mdash; $<%= sprintf( "%0.2f", total ) %></li>
+      </ul>
+    </dd>
+  </dl>
+
+  <p><a href="<%= BaseURI %>/person/account.rhtml">&laquo; Back to account information</a></p>
+<% end %>
