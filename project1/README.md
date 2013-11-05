@@ -1,10 +1,7 @@
-Sarah Vessels
-CS 505, Fall 2010
-Project 1
+# Project 1, Fall 2010
 
 This project was built using the Ruby on Rails framework, version 2.3.5, and
-the Ruby programming language, version 1.8.7.  Documentation for methods and
-classes can be found in doc/; view the index.html page in your browser.
+the Ruby programming language, version 1.8.7.
 
 Ruby on Rails uses the Model View Controller design pattern.  Models are the
 means through which data from your data source (typically a database) is
@@ -18,10 +15,6 @@ in app/.
 Ruby on Rails usually provides methods that generate SQL statements for you.
 I did not use these features but instead wrote and generated my own SQL.  This
 kind of code can be found in app/models/.  I used a MySQL database for my DBMS.
-
-A live version of my web application for this project can be found currently at
-http://cs505.3till7.net/  You will need a user name and password to access the
-web site.  User name:  marek, password:  v1c70rm4r3kc5505
 
 I made use of HTML 5 and CSS 3 to design the user interface of this project.
 I tested it in Chrome 6.0.472.63 and Firefox 3.6.10 in OS X.  Javascript is used
